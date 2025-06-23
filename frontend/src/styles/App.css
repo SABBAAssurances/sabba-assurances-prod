@@ -195,7 +195,7 @@ body {
   background: #f5f6fa;
   border: 1.5px solid #151e29;
   border-radius: 12px;
-  padding: 18px 16px;
+  padding: 30px;
   margin-bottom: 18px;
 }
 
@@ -340,4 +340,79 @@ body {
 .form-input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+/* Styles pour l'étape de succès */
+.success-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 40px 20px;
+}
+
+.success-content {
+  text-align: center;
+  max-width: 500px;
+  background: #fff;
+  padding: 40px;
+  border-radius: 16px;
+  border: 2px solid #4CAF50;
+  box-shadow: 0 8px 32px rgba(76, 175, 80, 0.1);
+}
+
+.success-icon {
+  margin-bottom: 24px;
+}
+
+.success-title {
+  color: #151e29;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
+
+.success-message {
+  color: #151e29;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.success-details {
+  background: #f5f6fa;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #151e29;
+}
+
+.success-details p {
+  color: #151e29;
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+
+.success-details p:last-child {
+  margin-bottom: 0;
+  font-weight: 600;
+  color: #4CAF50;
+}
+
+@media (max-width: 600px) {
+  .success-container {
+    padding: 20px 10px;
+  }
+  
+  .success-content {
+    padding: 30px 20px;
+  }
+  
+  .success-title {
+    font-size: 1.5rem;
+  }
+  
+  .success-message {
+    font-size: 1rem;
+  }
 } 

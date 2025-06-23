@@ -1,66 +1,50 @@
-const axios = require("axios");
+const SibApiV3Sdk = require("sib-api-v3-sdk");
 
 class EmailService {
   constructor() {
     this.apiKey = process.env.BREVO_API_KEY;
-    this.baseUrl = "https://api.brevo.com/v3";
-    this.isDev = process.env.DEV === "true";
+    this.sender = {
+      name: "Sabba Assurances",
+      email: "noreply@sabba-assurances.com",
+    };
+    this.recipient = {
+      email: "rayan.kheloufi@hotmail.com",
+      name: "Rayan Kheloufi",
+    };
   }
 
   async sendEmailRecap(formData, vehicleData) {
     try {
-      const emailContent = this.formatEmailContent(formData, vehicleData);
+      // Initialisation du client Brevo
+      var defaultClient = SibApiV3Sdk.ApiClient.instance;
+      var apiKey = defaultClient.authentications["api-key"];
+      apiKey.apiKey = this.apiKey;
+      var apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
-      const params = {
-        sender: {
-          name: "Sabba Assurances",
-          email: "noreply@sabba-assurances.com",
-        },
-        to: [
-          {
-            email: "rayan.kheloufi@hotmail.com",
-            name: "Rayan Kheloufi",
-          },
-        ],
-        subject: "Nouvelle demande de devis auto prestige",
-        htmlContent: emailContent,
-      };
+      // Construction du contenu HTML
+      const htmlContent = this.formatEmailContent(formData, vehicleData);
 
-      const headers = {
-        headers: {
-          "api-key": this.apiKey,
-          "Content-Type": "application/json",
-        },
-      };
+      // Préparation de l'email
+      const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+      sendSmtpEmail.sender = this.sender;
+      sendSmtpEmail.to = [this.recipient];
+      sendSmtpEmail.subject = "Nouvelle demande de devis auto prestige";
+      sendSmtpEmail.htmlContent = htmlContent;
 
-      if (this.isDev) {
-        console.log(
-          "Mode développement activé - Utilisation des données mockées"
-        );
-        console.log(params);
-        console.log(headers);
-
-        return {
-          success: true,
-          messageId: "mock-message-id",
-        };
-      }
-
-      const response = await axios.post(
-        `${this.baseUrl}/smtp/email`,
-        params,
-        headers
-      );
-
+      // Envoi de l'email
+      const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
       return {
         success: true,
-        messageId: response.data.messageId,
+        messageId: data.messageId,
       };
     } catch (error) {
-      console.error("Erreur lors de l'envoi de l'email:", error.message);
+      console.error(
+        "Erreur lors de l'envoi de l'email via Brevo:",
+        error.message
+      );
       return {
         success: false,
-        error: "Erreur lors de l'envoi de l'email",
+        error: "Erreur lors de l'envoi de l'email via Brevo",
       };
     }
   }
@@ -70,7 +54,6 @@ class EmailService {
       if (!dateString) return "Non renseigné";
       return new Date(dateString).toLocaleDateString("fr-FR");
     };
-
     const formatCurrency = (amount) => {
       if (!amount) return "Non renseigné";
       return new Intl.NumberFormat("fr-FR", {
@@ -78,7 +61,6 @@ class EmailService {
         currency: "EUR",
       }).format(amount);
     };
-
     return `
       <!DOCTYPE html>
       <html>
@@ -103,7 +85,6 @@ class EmailService {
             <h1>🚗 Nouvelle demande de devis auto prestige</h1>
             <p>Date de demande: ${new Date().toLocaleString("fr-FR")}</p>
           </div>
-
           <div class="section vehicle-info">
             <h3>📋 Informations du véhicule</h3>
             <div class="field">
@@ -127,7 +108,9 @@ class EmailService {
             <div class="field">
               <span class="label">Énergie:</span>
               <span class="value">${
-                vehicleData?.energieLibelle || "Non renseigné"
+                vehicleData?.energieLibelle ||
+                vehicleData?.energieNGC ||
+                "Non renseigné"
               }</span>
             </div>
             <div class="field">
@@ -151,11 +134,12 @@ class EmailService {
             <div class="field">
               <span class="label">Boîte de vitesse:</span>
               <span class="value">${
-                vehicleData?.boiteVitesseLibelle || "Non renseigné"
+                vehicleData?.boiteVitesseLibelle ||
+                vehicleData?.boite_vitesse ||
+                "Non renseigné"
               }</span>
             </div>
           </div>
-
           <div class="section">
             <h3>👤 Informations personnelles</h3>
             <div class="field">
@@ -199,7 +183,6 @@ class EmailService {
               }</span>
             </div>
           </div>
-
           <div class="section">
             <h3>🚗 Informations d'assurance</h3>
             <div class="field">
@@ -245,7 +228,6 @@ class EmailService {
               }</span>
             </div>
           </div>
-
           <div class="section">
             <h3>📝 Informations complémentaires</h3>
             <div class="field">

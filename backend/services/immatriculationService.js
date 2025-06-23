@@ -11,9 +11,6 @@ class ImmatriculationService {
     try {
       // Si on est en mode développement, retourner les données mockées
       if (this.isDev) {
-        console.log(
-          "Mode développement activé - Utilisation des données mockées"
-        );
         await new Promise((resolve) => setTimeout(resolve, 2000));
         return {
           success: true,

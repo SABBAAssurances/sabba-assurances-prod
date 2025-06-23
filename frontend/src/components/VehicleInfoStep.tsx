@@ -21,7 +21,7 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
   const isValid =
     formData.marqueVehicule.trim() &&
     formData.typeVersion.trim() &&
-    formData.valeurVehicule &&
+    formData.valeurVehicule !== undefined &&
     formData.dateMiseCirculation;
 
   const validate = (): boolean => {
@@ -80,7 +80,7 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
           className={`form-input${getError("valeurVehicule") ? " error" : ""}`}
           type="number"
           min={0}
-          value={formData.valeurVehicule}
+          value={formData.valeurVehicule ?? ""}
           onChange={(e) => onUpdate({ valeurVehicule: Number(e.target.value) })}
         />
         {getError("valeurVehicule") && (

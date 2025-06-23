@@ -89,7 +89,7 @@ export interface FormData {
   // Informations du véhicule
   marqueVehicule: string;
   typeVersion: string;
-  valeurVehicule: number;
+  valeurVehicule: number | undefined;
   dateMiseCirculation: string;
   immatriculation: string;
   
@@ -123,7 +123,8 @@ export enum FormStep {
   INSURANCE_INFO = 'insurance_info',
   VEHICLE_INFO = 'vehicle_info',
   ADDITIONAL_INFO = 'additional_info',
-  SUMMARY = 'summary'
+  SUMMARY = 'summary',
+  SUCCESS = 'success'
 }
 
 // Types pour les options des menus déroulants

@@ -3,6 +3,7 @@ import AdditionalInfoStep from "./components/AdditionalInfoStep";
 import InsuranceInfoStep from "./components/InsuranceInfoStep";
 import PersonalInfoStep from "./components/PersonalInfoStep";
 import StepIndicator from "./components/StepIndicator";
+import SuccessStep from "./components/SuccessStep";
 import SummaryStep from "./components/SummaryStep";
 import VehicleFound from "./components/VehicleFound";
 import VehicleInfoStep from "./components/VehicleInfoStep";
@@ -29,7 +30,7 @@ const App: React.FC = () => {
     utilisationVehicule: "",
     marqueVehicule: "",
     typeVersion: "",
-    valeurVehicule: 0,
+    valeurVehicule: undefined,
     dateMiseCirculation: "",
     immatriculation: "",
     modeFinancement: "",
@@ -47,10 +48,8 @@ const App: React.FC = () => {
   useEffect(() => {
     const checkServerHealth = async () => {
       try {
-        console.log("Checking server health...");
         const health = await apiService.healthCheck();
-        console.log("Health:", health);
-        console.log("Health:", health.success);
+
         if (!health.success) {
           setError(
             "Serveur backend indisponible. Veuillez réessayer plus tard."
@@ -129,7 +128,7 @@ const App: React.FC = () => {
         setSuccess(
           "Votre demande a été envoyée avec succès ! Nous vous contacterons rapidement."
         );
-        setCurrentStep(FormStep.SUMMARY);
+        setCurrentStep(FormStep.SUCCESS);
       } else {
         setError(result.error || "Erreur lors de l'envoi de la demande");
       }
@@ -207,6 +206,9 @@ const App: React.FC = () => {
             success={success}
           />
         );
+
+      case FormStep.SUCCESS:
+        return <SuccessStep />;
 
       default:
         return <div>Étape non reconnue</div>;

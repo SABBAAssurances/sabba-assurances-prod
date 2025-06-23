@@ -31,6 +31,9 @@ const VehicleFound: React.FC<VehicleFoundProps> = ({ vehicleData, onNext }) => {
               objectFit: "contain",
               borderRadius: 8,
             }}
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
           />
         </div>
       )}
@@ -40,6 +43,9 @@ const VehicleFound: React.FC<VehicleFoundProps> = ({ vehicleData, onNext }) => {
             src={vehicleData.logo_marque}
             alt={vehicleData.marque}
             style={{ maxHeight: 32, maxWidth: 90, objectFit: "contain" }}
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
           />
         </div>
       )}
@@ -117,46 +123,6 @@ const VehicleFound: React.FC<VehicleFoundProps> = ({ vehicleData, onNext }) => {
         <span className="info-value">
           {vehicleData.couleur || "Non renseignée"}
         </span>
-      </div>
-      <div className="info-row">
-        <span className="info-label">Cylindrée :</span>
-        <span className="info-value">{vehicleData.ccm}</span>
-      </div>
-      <div className="info-row">
-        <span className="info-label">Poids :</span>
-        <span className="info-value">{vehicleData.poids}</span>
-      </div>
-      <div className="info-row">
-        <span className="info-label">PTAC :</span>
-        <span className="info-value">{vehicleData.ptac}</span>
-      </div>
-      <div className="info-row">
-        <span className="info-label">CO2 :</span>
-        <span className="info-value">{vehicleData.co2} g/km</span>
-      </div>
-      <div className="info-row">
-        <span className="info-label">Propulsion :</span>
-        <span className="info-value">{vehicleData.propulsion}</span>
-      </div>
-      <div className="info-row">
-        <span className="info-label">Type de compression :</span>
-        <span className="info-value">{vehicleData.type_compression}</span>
-      </div>
-      <div className="info-row">
-        <span className="info-label">Longueur :</span>
-        <span className="info-value">{vehicleData.longueur} cm</span>
-      </div>
-      <div className="info-row">
-        <span className="info-label">Largeur :</span>
-        <span className="info-value">{vehicleData.largeur} cm</span>
-      </div>
-      <div className="info-row">
-        <span className="info-label">Hauteur :</span>
-        <span className="info-value">{vehicleData.hauteur} cm</span>
-      </div>
-      <div className="info-row">
-        <span className="info-label">Empattement :</span>
-        <span className="info-value">{vehicleData.empattement} cm</span>
       </div>
       <button
         className="btn btn-primary"
