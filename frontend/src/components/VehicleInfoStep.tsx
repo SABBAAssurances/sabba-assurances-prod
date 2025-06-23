@@ -48,6 +48,18 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
 
   return (
     <form className="form-container" onSubmit={handleNext} autoComplete="off">
+      {!vehicleData && (
+        <div className="info-card" style={{ marginBottom: "24px" }}>
+          <h4 style={{ marginBottom: "8px", color: "#151e29" }}>
+            Saisie manuelle des informations
+          </h4>
+          <p style={{ color: "#151e29", fontSize: "0.95rem", margin: 0 }}>
+            Aucun véhicule n'a été trouvé automatiquement. Veuillez saisir les
+            informations de votre véhicule manuellement.
+          </p>
+        </div>
+      )}
+
       <div className="form-group">
         <label className="form-label">Marque de votre véhicule *</label>
         <input

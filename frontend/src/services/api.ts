@@ -25,11 +25,15 @@ export const apiService = {
   async getVehicleInfo(plaque: string): Promise<ApiResponse<VehicleData>> {
     try {
       const response = await apiClient.get(`/immatriculation?plaque=${encodeURIComponent(plaque)}`);
-      return response.data;
+      return {
+        ...response.data,
+        httpCode: response.status
+      };
     } catch (error: any) {
       return {
         success: false,
-        error: error.response?.data?.error || 'Erreur lors de la récupération des informations du véhicule'
+        error: error.response?.data?.error || 'Erreur lors de la récupération des informations du véhicule',
+        httpCode: error.response?.status || 500
       };
     }
   },
@@ -41,11 +45,15 @@ export const apiService = {
         formData,
         vehicleData
       });
-      return response.data;
+      return {
+        ...response.data,
+        httpCode: response.status
+      };
     } catch (error: any) {
       return {
         success: false,
-        error: error.response?.data?.error || 'Erreur lors de l\'envoi de l\'email'
+        error: error.response?.data?.error || 'Erreur lors de l\'envoi de l\'email',
+        httpCode: error.response?.status || 500
       };
     }
   },
@@ -59,12 +67,14 @@ export const apiService = {
       return {
         success: response.data.status === 'OK',
         data: response.data,
-        error: response.data.status !== 'OK' ? response.data.message : undefined
+        error: response.data.status !== 'OK' ? response.data.message : undefined,
+        httpCode: response.status
       };
     } catch (error: any) {
       return {
         success: false,
-        error: 'Serveur indisponible'
+        error: 'Serveur indisponible',
+        httpCode: error.response?.status || 500
       };
     }
   }

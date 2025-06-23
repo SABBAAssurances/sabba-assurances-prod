@@ -87,6 +87,20 @@ const App: React.FC = () => {
     }
   };
 
+  const prevStepFromPersonalInfo = () => {
+    // Si aucun véhicule n'a été trouvé, retourner à VEHICLE_SEARCH
+    if (!vehicleData) {
+      setCurrentStep(FormStep.VEHICLE_SEARCH);
+      setError(null);
+      setSuccess(null);
+    } else {
+      // Sinon, retourner à VEHICLE_FOUND
+      setCurrentStep(FormStep.VEHICLE_FOUND);
+      setError(null);
+      setSuccess(null);
+    }
+  };
+
   const handleVehicleSearch = async (plaque: string) => {
     setLoading(true);
     setError(null);
@@ -104,11 +118,21 @@ const App: React.FC = () => {
           immatriculation: result.data.immat,
         });
         setCurrentStep(FormStep.VEHICLE_FOUND);
+      } else if (result.httpCode === 404) {
+        // Si la plaque n'est pas trouvée (404), on continue automatiquement
+        setCurrentStep(FormStep.PERSONAL_INFO);
       } else {
-        setError(result.error || "Aucun véhicule trouvé pour cette plaque");
+        // Autres erreurs
+        setError(
+          result.error ||
+            "Erreur lors de la recherche du véhicule. Vous devrez saisir les informations manuellement."
+        );
       }
     } catch (error) {
-      setError("Erreur lors de la recherche du véhicule");
+      // En cas d'erreur, on continue aussi
+      setError(
+        "Erreur lors de la recherche du véhicule. Vous devrez saisir les informations manuellement."
+      );
     } finally {
       setLoading(false);
     }
@@ -159,7 +183,7 @@ const App: React.FC = () => {
             formData={formData}
             onUpdate={updateFormData}
             onNext={nextStep}
-            onPrev={prevStep}
+            onPrev={prevStepFromPersonalInfo}
           />
         );
 

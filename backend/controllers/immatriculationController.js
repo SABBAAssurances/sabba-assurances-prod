@@ -22,20 +22,19 @@ class ImmatriculationController {
         const formattedData = immatriculationService.formatVehicleData(
           result.data
         );
-
-        res.json({
+        return res.status(404).json({
           success: true,
           data: formattedData,
         });
       } else {
-        res.status(404).json({
+        return res.status(404).json({
           success: false,
           error: result.error,
         });
       }
     } catch (error) {
       console.error("Erreur dans le contrôleur d'immatriculation:", error);
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
         error: "Erreur interne du serveur",
       });

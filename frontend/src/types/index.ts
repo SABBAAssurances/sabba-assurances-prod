@@ -106,6 +106,7 @@ export interface ApiResponse<T> {
   success: boolean;
   data?: T;
   error?: string;
+  httpCode?: number;
 }
 
 export interface EmailResponse {
@@ -113,6 +114,7 @@ export interface EmailResponse {
   message?: string;
   messageId?: string;
   error?: string;
+  httpCode?: number;
 }
 
 // Types pour les étapes du formulaire

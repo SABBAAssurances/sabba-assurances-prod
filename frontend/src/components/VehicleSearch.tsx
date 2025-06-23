@@ -58,10 +58,15 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
             }}
           />
         ) : (
-          "Continuer"
+          "Rechercher le véhicule"
         )}
       </button>
-      {error && <div className="error-message">{error}</div>}
+
+      {error && (
+        <div className="error-message" style={{ marginBottom: "16px" }}>
+          {error}
+        </div>
+      )}
     </form>
   );
 };

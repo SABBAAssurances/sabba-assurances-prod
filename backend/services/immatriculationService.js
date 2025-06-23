@@ -11,7 +11,6 @@ class ImmatriculationService {
     try {
       // Si on est en mode développement, retourner les données mockées
       if (this.isDev) {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
         return {
           success: true,
           data: this.getMockVehicleData(plaque),
