@@ -6,6 +6,8 @@ interface VehicleSearchProps {
   error: string | null;
 }
 
+const plaqueRegex = /^[A-Z]{2}-?\d{3}-?[A-Z]{2}$/i;
+
 const VehicleSearch: React.FC<VehicleSearchProps> = ({
   onSearch,
   loading,
@@ -13,9 +15,11 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
 }) => {
   const [plaque, setPlaque] = useState("");
 
+  const isPlaqueValid = plaqueRegex.test(plaque.trim().toUpperCase());
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (plaque.trim()) {
+    if (isPlaqueValid) {
       onSearch(plaque.trim());
     }
   };
@@ -41,9 +45,21 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
       <button
         className="btn btn-primary"
         type="submit"
-        disabled={loading || !plaque.trim()}
+        disabled={loading || !isPlaqueValid}
       >
-        {loading ? "Recherche..." : "Continuer"}
+        {loading ? (
+          <span
+            className="spinner"
+            style={{
+              width: 22,
+              height: 22,
+              display: "inline-block",
+              verticalAlign: "middle",
+            }}
+          />
+        ) : (
+          "Continuer"
+        )}
       </button>
       {error && <div className="error-message">{error}</div>}
     </form>

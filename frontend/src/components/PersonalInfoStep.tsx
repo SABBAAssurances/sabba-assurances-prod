@@ -16,6 +16,16 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
 }) => {
   const [errors, setErrors] = useState<ValidationError[]>([]);
 
+  const isValid =
+    formData.nomComplet.trim() &&
+    formData.adresse.trim() &&
+    formData.dateNaissance &&
+    formData.datePermisB &&
+    formData.moisAnneePermis &&
+    formData.profession.trim() &&
+    formData.email.trim() &&
+    formData.telephone.trim();
+
   const validate = (): boolean => {
     const newErrors: ValidationError[] = [];
     if (!formData.nomComplet.trim())
@@ -148,7 +158,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
         <button type="button" className="btn btn-secondary" onClick={onPrev}>
           Retour
         </button>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary" disabled={!isValid}>
           Étape suivante
         </button>
       </div>

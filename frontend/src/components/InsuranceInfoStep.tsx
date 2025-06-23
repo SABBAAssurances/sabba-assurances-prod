@@ -28,6 +28,11 @@ const InsuranceInfoStep: React.FC<InsuranceInfoStepProps> = ({
 }) => {
   const [errors, setErrors] = useState<ValidationError[]>([]);
 
+  const isValid =
+    formData.bonusMalus &&
+    formData.sinistres36Mois !== undefined &&
+    formData.utilisationVehicule;
+
   const validate = (): boolean => {
     const newErrors: ValidationError[] = [];
     if (!formData.bonusMalus)
@@ -121,7 +126,7 @@ const InsuranceInfoStep: React.FC<InsuranceInfoStepProps> = ({
         <button type="button" className="btn btn-secondary" onClick={onPrev}>
           Retour
         </button>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary" disabled={!isValid}>
           Étape suivante
         </button>
       </div>

@@ -51,6 +51,12 @@ const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
 }) => {
   const [errors, setErrors] = useState<ValidationError[]>([]);
 
+  const isValid =
+    formData.modeFinancement &&
+    formData.lieuStationnement &&
+    formData.choixGaranties &&
+    formData.commentConnaissance;
+
   const validate = (): boolean => {
     const newErrors: ValidationError[] = [];
     if (!formData.modeFinancement)
@@ -168,7 +174,7 @@ const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
         <button type="button" className="btn btn-secondary" onClick={onPrev}>
           Retour
         </button>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary" disabled={!isValid}>
           Étape suivante
         </button>
       </div>

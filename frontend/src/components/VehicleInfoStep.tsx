@@ -18,6 +18,12 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
 }) => {
   const [errors, setErrors] = useState<ValidationError[]>([]);
 
+  const isValid =
+    formData.marqueVehicule.trim() &&
+    formData.typeVersion.trim() &&
+    formData.valeurVehicule &&
+    formData.dateMiseCirculation;
+
   const validate = (): boolean => {
     const newErrors: ValidationError[] = [];
     if (!formData.marqueVehicule.trim())
@@ -112,7 +118,7 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
         <button type="button" className="btn btn-secondary" onClick={onPrev}>
           Retour
         </button>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-primary" disabled={!isValid}>
           Étape suivante
         </button>
       </div>
