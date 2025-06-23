@@ -3,10 +3,15 @@ import { VehicleData } from "../types";
 
 interface VehicleFoundProps {
   vehicleData: VehicleData;
+  onVehicleDataUpdate: (updates: Partial<VehicleData>) => void;
   onNext: () => void;
 }
 
-const VehicleFound: React.FC<VehicleFoundProps> = ({ vehicleData, onNext }) => {
+const VehicleFound: React.FC<VehicleFoundProps> = ({
+  vehicleData,
+  onVehicleDataUpdate,
+  onNext,
+}) => {
   const [selectedVersion, setSelectedVersion] = useState(
     vehicleData.sra_commercial
   );
@@ -16,6 +21,12 @@ const VehicleFound: React.FC<VehicleFoundProps> = ({ vehicleData, onNext }) => {
     vehicleData.liste_sra_commercial.length > 1
       ? vehicleData.liste_sra_commercial
       : null;
+
+  const handleVersionChange = (newVersion: string) => {
+    setSelectedVersion(newVersion);
+    // Mettre à jour les données du véhicule avec la version choisie
+    onVehicleDataUpdate({ sra_commercial: newVersion });
+  };
 
   return (
     <div className="info-card">
@@ -60,7 +71,7 @@ const VehicleFound: React.FC<VehicleFoundProps> = ({ vehicleData, onNext }) => {
       <div className="info-row">
         <span className="info-label">Version :</span>
         <span className="info-value">
-          {vehicleData.version || selectedVersion}
+          {selectedVersion || vehicleData.version || vehicleData.sra_commercial}
         </span>
       </div>
       {versions && (
@@ -69,7 +80,7 @@ const VehicleFound: React.FC<VehicleFoundProps> = ({ vehicleData, onNext }) => {
           <select
             className="form-select"
             value={selectedVersion}
-            onChange={(e) => setSelectedVersion(e.target.value)}
+            onChange={(e) => handleVersionChange(e.target.value)}
           >
             {versions.map((v) => (
               <option key={v.sra_id} value={v.sra_commercial}>

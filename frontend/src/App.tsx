@@ -67,6 +67,13 @@ const App: React.FC = () => {
     setFormData((prev) => ({ ...prev, ...updates }));
   };
 
+  const updateVehicleData = (updates: Partial<VehicleData>) => {
+    setVehicleData((prev) => {
+      const newData = prev ? { ...prev, ...updates } : null;
+      return newData;
+    });
+  };
+
   const nextStep = () => {
     const steps = Object.values(FormStep);
     const currentIndex = steps.indexOf(currentStep);
@@ -175,7 +182,13 @@ const App: React.FC = () => {
         );
 
       case FormStep.VEHICLE_FOUND:
-        return <VehicleFound vehicleData={vehicleData!} onNext={nextStep} />;
+        return (
+          <VehicleFound
+            vehicleData={vehicleData!}
+            onVehicleDataUpdate={updateVehicleData}
+            onNext={nextStep}
+          />
+        );
 
       case FormStep.PERSONAL_INFO:
         return (
@@ -203,6 +216,7 @@ const App: React.FC = () => {
             formData={formData}
             vehicleData={vehicleData}
             onUpdate={updateFormData}
+            onVehicleDataUpdate={updateVehicleData}
             onNext={nextStep}
             onPrev={prevStep}
           />

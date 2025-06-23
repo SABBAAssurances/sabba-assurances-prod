@@ -22,7 +22,7 @@ class ImmatriculationController {
         const formattedData = immatriculationService.formatVehicleData(
           result.data
         );
-        return res.status(404).json({
+        return res.json({
           success: true,
           data: formattedData,
         });

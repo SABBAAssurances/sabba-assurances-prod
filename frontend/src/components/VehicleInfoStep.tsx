@@ -5,6 +5,7 @@ interface VehicleInfoStepProps {
   formData: FormData;
   vehicleData?: VehicleData | null;
   onUpdate: (updates: Partial<FormData>) => void;
+  onVehicleDataUpdate: (updates: Partial<VehicleData>) => void;
   onNext: () => void;
   onPrev: () => void;
 }
@@ -13,6 +14,7 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
   formData,
   vehicleData,
   onUpdate,
+  onVehicleDataUpdate,
   onNext,
   onPrev,
 }) => {
@@ -66,7 +68,10 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
           className={`form-input${getError("marqueVehicule") ? " error" : ""}`}
           type="text"
           value={formData.marqueVehicule}
-          onChange={(e) => onUpdate({ marqueVehicule: e.target.value })}
+          onChange={(e) => {
+            onUpdate({ marqueVehicule: e.target.value });
+            onVehicleDataUpdate({ marque: e.target.value });
+          }}
         />
         {getError("marqueVehicule") && (
           <span className="error-message">{getError("marqueVehicule")}</span>
@@ -80,7 +85,10 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
           className={`form-input${getError("typeVersion") ? " error" : ""}`}
           type="text"
           value={formData.typeVersion}
-          onChange={(e) => onUpdate({ typeVersion: e.target.value })}
+          onChange={(e) => {
+            onUpdate({ typeVersion: e.target.value });
+            onVehicleDataUpdate({ modele: e.target.value });
+          }}
         />
         {getError("typeVersion") && (
           <span className="error-message">{getError("typeVersion")}</span>
@@ -93,7 +101,11 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
           type="number"
           min={0}
           value={formData.valeurVehicule ?? ""}
-          onChange={(e) => onUpdate({ valeurVehicule: Number(e.target.value) })}
+          onChange={(e) => {
+            const value = Number(e.target.value);
+            onUpdate({ valeurVehicule: value });
+            onVehicleDataUpdate({ valeurVehicule: value } as any);
+          }}
         />
         {getError("valeurVehicule") && (
           <span className="error-message">{getError("valeurVehicule")}</span>
@@ -107,7 +119,10 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
           }`}
           type="date"
           value={formData.dateMiseCirculation}
-          onChange={(e) => onUpdate({ dateMiseCirculation: e.target.value })}
+          onChange={(e) => {
+            onUpdate({ dateMiseCirculation: e.target.value });
+            onVehicleDataUpdate({ date1erCir_us: e.target.value });
+          }}
         />
         {getError("dateMiseCirculation") && (
           <span className="error-message">
@@ -123,7 +138,10 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
           className="form-input"
           type="text"
           value={formData.immatriculation}
-          onChange={(e) => onUpdate({ immatriculation: e.target.value })}
+          onChange={(e) => {
+            onUpdate({ immatriculation: e.target.value });
+            onVehicleDataUpdate({ immat: e.target.value });
+          }}
         />
       </div>
       <div className="step-navigation">
