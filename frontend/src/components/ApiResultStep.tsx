@@ -1,32 +1,65 @@
-import React, { useState } from "react";
+import React from "react";
 import { VehicleData } from "../types";
 
-interface VehicleFoundProps {
-  vehicleData: VehicleData;
-  onVehicleDataUpdate: (updates: Partial<VehicleData>) => void;
-  onNext: () => void;
+interface ApiResultStepProps {
+  vehicleData: VehicleData | null;
+  onBack: () => void;
+  onContinue: () => void;
 }
 
-const VehicleFound: React.FC<VehicleFoundProps> = ({
+interface ButtonGroupProps {
+  onBack: () => void;
+  onContinue: () => void;
+  backText: string;
+  continueText: string;
+}
+
+const ButtonGroup: React.FC<ButtonGroupProps> = ({
+  onBack,
+  onContinue,
+  backText,
+  continueText,
+}) => (
+  <div className="button-group" style={{ display: "flex", gap: "16px" }}>
+    <button type="button" className="btn btn-secondary" onClick={onBack}>
+      ← {backText}
+    </button>
+    <button type="button" className="btn btn-primary" onClick={onContinue}>
+      {continueText} →
+    </button>
+  </div>
+);
+
+const ApiResultStep: React.FC<ApiResultStepProps> = ({
   vehicleData,
-  onVehicleDataUpdate,
-  onNext,
+  onBack,
+  onContinue,
 }) => {
-  const [selectedVersion, setSelectedVersion] = useState(
-    vehicleData.sra_commercial
-  );
-
-  const versions =
-    vehicleData.liste_sra_commercial &&
-    vehicleData.liste_sra_commercial.length > 1
-      ? vehicleData.liste_sra_commercial
-      : null;
-
-  const handleVersionChange = (newVersion: string) => {
-    setSelectedVersion(newVersion);
-    // Mettre à jour les données du véhicule avec la version choisie
-    onVehicleDataUpdate({ sra_commercial: newVersion });
-  };
+  if (!vehicleData) {
+    return (
+      <div className="step-container">
+        <div className="step-content">
+          <h2>Véhicule non trouvé</h2>
+          <div className="error-message">
+            <p>
+              Nous n'avons pas pu trouver les informations pour ce véhicule avec
+              la plaque d'immatriculation fournie.
+            </p>
+            <p>
+              Vous devrez saisir manuellement les informations de votre véhicule
+              pour continuer avec votre devis d'assurance.
+            </p>
+          </div>
+          <ButtonGroup
+            onBack={onBack}
+            onContinue={onContinue}
+            backText="Retour à la recherche"
+            continueText="Saisir manuellement"
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="info-card">
@@ -71,25 +104,9 @@ const VehicleFound: React.FC<VehicleFoundProps> = ({
       <div className="info-row">
         <span className="info-label">Version :</span>
         <span className="info-value">
-          {selectedVersion || vehicleData.version || vehicleData.sra_commercial}
+          {vehicleData.version || vehicleData.sra_commercial}
         </span>
       </div>
-      {versions && (
-        <div className="form-group" style={{ marginBottom: 12 }}>
-          <label className="form-label">Autres versions commerciales :</label>
-          <select
-            className="form-select"
-            value={selectedVersion}
-            onChange={(e) => handleVersionChange(e.target.value)}
-          >
-            {versions.map((v) => (
-              <option key={v.sra_id} value={v.sra_commercial}>
-                {v.sra_commercial}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
       <div className="info-row">
         <span className="info-label">Énergie :</span>
         <span className="info-value">
@@ -135,15 +152,14 @@ const VehicleFound: React.FC<VehicleFoundProps> = ({
           {vehicleData.couleur || "Non renseignée"}
         </span>
       </div>
-      <button
-        className="btn btn-primary"
-        onClick={onNext}
-        style={{ marginTop: 20 }}
-      >
-        Étape suivante
-      </button>
+      <ButtonGroup
+        onBack={onBack}
+        onContinue={onContinue}
+        backText="Retour à la recherche"
+        continueText="Continuer"
+      />
     </div>
   );
 };
 
-export default VehicleFound;
+export default ApiResultStep;

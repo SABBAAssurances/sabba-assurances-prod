@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import AdditionalInfoStep from "./components/AdditionalInfoStep";
+import ApiResultStep from "./components/ApiResultStep";
 import InsuranceInfoStep from "./components/InsuranceInfoStep";
 import PersonalInfoStep from "./components/PersonalInfoStep";
 import StepIndicator from "./components/StepIndicator";
 import SuccessStep from "./components/SuccessStep";
 import SummaryStep from "./components/SummaryStep";
-import VehicleFound from "./components/VehicleFound";
 import VehicleInfoStep from "./components/VehicleInfoStep";
 import VehicleSearch from "./components/VehicleSearch";
 import { apiService } from "./services/api";
@@ -101,8 +101,8 @@ const App: React.FC = () => {
       setError(null);
       setSuccess(null);
     } else {
-      // Sinon, retourner à VEHICLE_FOUND
-      setCurrentStep(FormStep.VEHICLE_FOUND);
+      // Sinon, retourner à API_RESULT
+      setCurrentStep(FormStep.API_RESULT);
       setError(null);
       setSuccess(null);
     }
@@ -124,25 +124,31 @@ const App: React.FC = () => {
           dateMiseCirculation: result.data.date1erCir_us,
           immatriculation: result.data.immat,
         });
-        setCurrentStep(FormStep.VEHICLE_FOUND);
-      } else if (result.httpCode === 404) {
-        // Si la plaque n'est pas trouvée (404), on continue automatiquement
-        setCurrentStep(FormStep.PERSONAL_INFO);
+        setCurrentStep(FormStep.API_RESULT);
       } else {
-        // Autres erreurs
-        setError(
-          result.error ||
-            "Erreur lors de la recherche du véhicule. Vous devrez saisir les informations manuellement."
-        );
+        // Véhicule non trouvé ou erreur
+        setVehicleData(null);
+        setCurrentStep(FormStep.API_RESULT);
       }
     } catch (error) {
-      // En cas d'erreur, on continue aussi
-      setError(
-        "Erreur lors de la recherche du véhicule. Vous devrez saisir les informations manuellement."
-      );
+      // En cas d'erreur, on affiche aussi le résultat
+      setVehicleData(null);
+      setCurrentStep(FormStep.API_RESULT);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleApiResultBack = () => {
+    setCurrentStep(FormStep.VEHICLE_SEARCH);
+    setError(null);
+    setSuccess(null);
+  };
+
+  const handleApiResultContinue = () => {
+    setCurrentStep(FormStep.PERSONAL_INFO);
+    setError(null);
+    setSuccess(null);
   };
 
   const handleSubmit = async () => {
@@ -181,12 +187,12 @@ const App: React.FC = () => {
           />
         );
 
-      case FormStep.VEHICLE_FOUND:
+      case FormStep.API_RESULT:
         return (
-          <VehicleFound
-            vehicleData={vehicleData!}
-            onVehicleDataUpdate={updateVehicleData}
-            onNext={nextStep}
+          <ApiResultStep
+            vehicleData={vehicleData}
+            onBack={handleApiResultBack}
+            onContinue={handleApiResultContinue}
           />
         );
 

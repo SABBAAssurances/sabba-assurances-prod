@@ -8,7 +8,6 @@
       "program": "${workspaceFolder}/backend/server.js",
       "cwd": "${workspaceFolder}/backend",
       "env": {
-        "NODE_ENV": "development",
         "PORT": "3001"
       },
       "console": "integratedTerminal",

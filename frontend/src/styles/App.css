@@ -91,10 +91,19 @@ body {
 }
 
 .error-message {
-  color: #e74c3c;
-  font-size: 0.85rem;
-  margin-top: 5px;
-  display: block;
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.error-message p {
+  margin: 10px 0;
+  color: #856404;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .btn {
@@ -126,15 +135,15 @@ body {
 }
 
 .btn-secondary {
-  background: #f5f6fa;
+  background: #FFFFFF;
   color: #151e29;
   margin-right: 8px;
   border: 1.5px solid #151e29;
 }
 
-.btn-secondary:hover:not(:disabled) {
-  background: #151e29;
-  color: #f5f6fa;
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
 }
 
 .btn-success {
@@ -415,4 +424,4 @@ body {
   .success-message {
     font-size: 1rem;
   }
-} 
+}

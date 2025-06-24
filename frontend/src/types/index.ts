@@ -120,7 +120,7 @@ export interface EmailResponse {
 // Types pour les étapes du formulaire
 export enum FormStep {
   VEHICLE_SEARCH = 'vehicle_search',
-  VEHICLE_FOUND = 'vehicle_found',
+  API_RESULT = 'api_result',
   PERSONAL_INFO = 'personal_info',
   INSURANCE_INFO = 'insurance_info',
   VEHICLE_INFO = 'vehicle_info',
