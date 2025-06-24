@@ -127,12 +127,20 @@ const App: React.FC = () => {
         setCurrentStep(FormStep.API_RESULT);
       } else {
         // Véhicule non trouvé ou erreur
+        if (result.httpCode !== 404) {
+          setError(
+            "Une erreur est survenue lors de la récupération des informations."
+          );
+        }
         setVehicleData(null);
         setCurrentStep(FormStep.API_RESULT);
       }
     } catch (error) {
       // En cas d'erreur, on affiche aussi le résultat
       setVehicleData(null);
+      setError(
+        "Une erreur est survenue lors de la récupération des informations."
+      );
       setCurrentStep(FormStep.API_RESULT);
     } finally {
       setLoading(false);

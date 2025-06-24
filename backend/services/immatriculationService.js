@@ -24,11 +24,13 @@ class ImmatriculationService {
 
       if (response.data && response.data.data) {
         return {
+          httpStatus: response.data?.httpStatus || 200,
           success: true,
           data: response.data.data,
         };
       } else {
         return {
+          httpStatus: response.data?.httpStatus || 404,
           success: false,
           error: "Aucune donnée trouvée pour cette plaque",
         };
@@ -39,6 +41,7 @@ class ImmatriculationService {
         error.message
       );
       return {
+        httpStatus: error.response?.status || 500,
         success: false,
         error: "Erreur lors de la récupération des informations du véhicule",
       };
