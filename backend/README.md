@@ -19,7 +19,9 @@ PORT=3001
 FRONTEND_URL=http://localhost:3000
 API_KEY_IMMATRICULATION=TokenDemo2025A
 BREVO_API_KEY=your_brevo_api_key_here
-DEV=true
+NODE_ENV=development
+EMAIL_SENDER=sender@mail.fr
+EMAIL_RECIPIENT=recipient@mail.fr
 ```
 
 ## Variables d'environnement
@@ -28,9 +30,9 @@ DEV=true
 - `FRONTEND_URL` : URL du frontend pour CORS
 - `API_KEY_IMMATRICULATION` : Clé API pour l'API d'immatriculation
 - `BREVO_API_KEY` : Clé API Brevo pour l'envoi d'emails
-- `DEV` : Mode développement (true/false)
-  - Si `DEV=true` : L'API d'immatriculation utilise des données mockées
-  - Si `DEV=false` ou non défini : Utilise l'API réelle d'immatriculation
+- `NODE_ENV` : Mode développement (true/false)
+  - Si `NODE_ENV=development` : L'API d'immatriculation utilise des données mockées
+  - Si `NODE_ENV=production` ou non défini : Utilise l'API réelle d'immatriculation
 
 ## Démarrage
 

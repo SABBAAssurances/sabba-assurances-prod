@@ -5,10 +5,10 @@ class EmailService {
     this.apiKey = process.env.BREVO_API_KEY;
     this.sender = {
       name: "Sabba Assurances",
-      email: "rayan.kheloufi@r-square.fr",
+      email: process.env.EMAIL_SENDER,
     };
     this.recipient = {
-      email: "rayan.kheloufi@hotmail.com",
+      email: process.env.EMAIL_RECIPIENT,
       name: "Rayan Kheloufi",
     };
     this.isDev = process.env.NODE_ENV === "development";
