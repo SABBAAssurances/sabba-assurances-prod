@@ -7,13 +7,5 @@
         "api/send-email-recap.js": {
             "maxDuration": 10
         }
-    },
-    "env": {
-        "FRONTEND_URL": "@frontend-url",
-        "API_KEY_IMMATRICULATION": "@api-key-immatriculation",
-        "BREVO_API_KEY": "@brevo-api-key",
-        "NODE_ENV": "@node-env",
-        "EMAIL_SENDER": "@email-sender",
-        "EMAIL_RECIPIENT": "@email-recipient"
     }
 }

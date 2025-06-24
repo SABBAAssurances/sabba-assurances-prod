@@ -32,25 +32,23 @@ Suivez les instructions :
 
 #### C. Variables d'environnement Vercel
 
-Créer les variables d'environnement dans Vercel :
+**IMPORTANT** : Configurez les variables d'environnement directement dans le dashboard Vercel :
 
-```bash
-vercel env add FRONTEND_URL
-vercel env add API_KEY_IMMATRICULATION
-vercel env add BREVO_API_KEY
-vercel env add NODE_ENV
-vercel env add EMAIL_SENDER
-vercel env add EMAIL_RECIPIENT
-```
+1. Allez sur [vercel.com/dashboard](https://vercel.com/dashboard)
+2. Sélectionnez votre projet backend
+3. Allez dans "Settings" → "Environment Variables"
+4. Ajoutez les variables suivantes :
 
-**Valeurs recommandées :**
+| Variable                  | Description             | Exemple                                        |
+| ------------------------- | ----------------------- | ---------------------------------------------- |
+| `FRONTEND_URL`            | URL du frontend         | `https://sabba-assurances-frontend.vercel.app` |
+| `API_KEY_IMMATRICULATION` | Clé API immatriculation | `TokenDemo2025A`                               |
+| `BREVO_API_KEY`           | Clé API Brevo           | `xkeysib-...`                                  |
+| `NODE_ENV`                | Mode environnement      | `production`                                   |
+| `EMAIL_SENDER`            | Email d'expédition      | `sender@mail.fr`                               |
+| `EMAIL_RECIPIENT`         | Email de réception      | `recipient@mail.fr`                            |
 
-- `FRONTEND_URL` : URL de votre frontend Vercel (ex: `https://sabba-assurances-frontend.vercel.app`)
-- `API_KEY_IMMATRICULATION` : Votre clé API immatriculation
-- `BREVO_API_KEY` : Votre clé API Brevo
-- `NODE_ENV` : `production` (pour la production)
-- `EMAIL_SENDER` : Votre email d'expédition (ex: `sender@mail.fr`)
-- `EMAIL_RECIPIENT` : Votre email de réception (ex: `recipient@mail.fr`)
+**Note** : Ne pas utiliser la commande `vercel env add` pour éviter les conflits avec les secrets.
 
 #### D. Déployer le backend
 
@@ -224,6 +222,13 @@ vercel --prod
 - Vérifier que vous êtes connecté : `vercel login`
 - Supprimer le lien existant : `vercel unlink`
 - Relier le projet : `vercel link`
+
+### Erreur "Environment Variable references Secret which does not exist"
+
+- Cette erreur se produit quand `vercel.json` référence des secrets inexistants
+- **Solution** : Supprimer la section `"env"` du fichier `vercel.json`
+- Configurer les variables d'environnement directement dans le dashboard Vercel
+- Ne pas utiliser `vercel env add` pour éviter les conflits
 
 ## 📊 Monitoring
 
