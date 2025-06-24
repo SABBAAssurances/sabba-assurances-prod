@@ -121,4 +121,4 @@ REACT_APP_API_URL=http://localhost:3001/api
 
 ---
 
-**Développé pour Sabba Assurances**
+**Développé pour Sabba Assurances par Rayan Kheloufi**
