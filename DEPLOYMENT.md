@@ -48,7 +48,7 @@ Suivez les instructions :
 | `EMAIL_SENDER`            | Email d'expédition      | `sender@mail.fr`                               |
 | `EMAIL_RECIPIENT`         | Email de réception      | `recipient@mail.fr`                            |
 
-**Note** : Ne pas utiliser la commande `vercel env add` pour éviter les conflits avec les secrets.
+**Note** : Ne pas utiliser la commande `vercel env add` pour éviter les conflits.
 
 #### D. Déployer le backend
 
@@ -116,6 +116,15 @@ vercel --prod
 - Redirige automatiquement les requêtes `/api/*` vers le backend
 
 ## 🔧 Configuration Avancée
+
+### Structure Vercel Functions
+
+Le backend utilise une structure Express.js adaptée pour Vercel :
+
+- `api/index.js` : Point d'entrée principal (fonction serverless)
+- `routes/` : Définition des routes Express
+- `controllers/` : Logique métier
+- `services/` : Services externes (API, email)
 
 ### Variables d'environnement Backend (Vercel Dashboard)
 
@@ -229,6 +238,19 @@ vercel --prod
 - **Solution** : Supprimer la section `"env"` du fichier `vercel.json`
 - Configurer les variables d'environnement directement dans le dashboard Vercel
 - Ne pas utiliser `vercel env add` pour éviter les conflits
+
+### Erreur 404 sur toutes les routes
+
+- **Cause** : Vercel ne trouve pas le point d'entrée de l'application
+- **Solution** : Vérifier que `api/index.js` existe et exporte l'app Express
+- Vérifier que `vercel.json` contient la configuration des routes
+- Redéployer après modification : `vercel --prod`
+
+### Erreur "Cannot find module" dans les logs
+
+- Vérifier que toutes les dépendances sont dans `package.json`
+- S'assurer que les chemins d'importation sont corrects
+- Vérifier que les fichiers `routes/` et `controllers/` existent
 
 ## 📊 Monitoring
 

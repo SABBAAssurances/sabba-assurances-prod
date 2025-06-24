@@ -1,11 +1,14 @@
 {
     "version": 2,
     "functions": {
-        "api/immatriculation.js": {
-            "maxDuration": 10
-        },
-        "api/send-email-recap.js": {
-            "maxDuration": 10
+        "api/index.js": {
+            "maxDuration": 30
         }
-    }
+    },
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/api/index.js"
+        }
+    ]
 }
