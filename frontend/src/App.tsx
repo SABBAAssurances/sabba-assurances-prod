@@ -269,12 +269,9 @@ const App: React.FC = () => {
 
   return (
     <div className="app-container">
-      {error && <div className="message error">{error}</div>}
-
-      {success && <div className="message success">{success}</div>}
-
       <StepIndicator currentStep={currentStep} />
-
+      {error && <div className="message error">{error}</div>}
+      {success && <div className="message success">{success}</div>}
       {renderCurrentStep()}
     </div>
   );
