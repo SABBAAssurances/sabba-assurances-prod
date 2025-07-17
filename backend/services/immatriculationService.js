@@ -18,7 +18,7 @@ class ImmatriculationService {
       }
 
       // Sinon, faire l'appel à l'API réelle
-      const response = await axios.post(
+      const response = await axios.get(
         `${this.baseUrl}/plaque?immatriculation=${plaque}&token=${this.apiKey}&pays=FR`
       );
 
