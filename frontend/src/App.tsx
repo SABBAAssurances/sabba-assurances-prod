@@ -153,7 +153,11 @@ const App: React.FC = () => {
     setSuccess(null);
   };
 
-  const handleApiResultContinue = () => {
+  const handleApiResultContinue = (modifiedData?: VehicleData) => {
+    // Si des données modifiées sont fournies, les utiliser à la place des données originales
+    if (modifiedData) {
+      setVehicleData(modifiedData);
+    }
     setCurrentStep(FormStep.PERSONAL_INFO);
     setError(null);
     setSuccess(null);

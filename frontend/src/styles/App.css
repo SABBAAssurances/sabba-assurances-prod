@@ -159,6 +159,12 @@ body {
   background: #222b3a;
 }
 
+.button-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+
 .step-navigation {
   display: flex;
   justify-content: flex-end;
@@ -213,6 +219,40 @@ body {
   margin-bottom: 12px;
   font-size: 1.1rem;
   font-weight: 600;
+}
+
+.info-card-editable {
+  position: relative;
+}
+
+.vehicle-photo-container {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.vehicle-photo {
+  max-height: 90px;
+  max-width: 180px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.brand-logo-container {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.brand-logo {
+  max-height: 32px;
+  max-width: 90px;
+  object-fit: contain;
+}
+
+.edit-button-container {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
 }
 
 .info-row {
@@ -408,6 +448,73 @@ body {
   color: #4CAF50;
 }
 
+/* Styles pour les boutons d'édition */
+.edit-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #007bff;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.edit-button:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.edit-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.save-button {
+  background: #28a745;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.save-button:hover {
+  background: #218838;
+}
+
+.cancel-button {
+  background: #dc3545;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.cancel-button:hover {
+  background: #c82333;
+}
+
+/* Styles pour les champs en mode édition */
+.edit-input {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 14px;
+  width: 200px;
+  font-family: inherit;
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
 @media (max-width: 600px) {
   .success-container {
     padding: 20px 10px;
@@ -423,5 +530,9 @@ body {
   
   .success-message {
     font-size: 1rem;
+  }
+  
+  .edit-input {
+    width: 150px;
   }
 }

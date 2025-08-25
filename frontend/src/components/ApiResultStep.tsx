@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { VehicleData } from "../types";
 
 interface ApiResultStepProps {
   vehicleData: VehicleData | null;
   onBack: () => void;
-  onContinue: () => void;
+  onContinue: (modifiedData?: VehicleData) => void;
 }
 
 interface ButtonGroupProps {
@@ -20,7 +20,7 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
   backText,
   continueText,
 }) => (
-  <div className="button-group" style={{ display: "flex", gap: "16px" }}>
+  <div className="button-group">
     <button type="button" className="btn btn-secondary" onClick={onBack}>
       ← {backText}
     </button>
@@ -35,6 +35,37 @@ const ApiResultStep: React.FC<ApiResultStepProps> = ({
   onBack,
   onContinue,
 }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedData, setEditedData] = useState<VehicleData | null>(null);
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+    setEditedData(vehicleData ? { ...vehicleData } : null);
+  };
+
+  const handleSaveEdit = () => {
+    setIsEditing(false);
+    // Les données modifiées sont maintenant dans editedData
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditedData(null);
+  };
+
+  const handleFieldChange = (field: keyof VehicleData, value: string) => {
+    if (editedData) {
+      setEditedData({ ...editedData, [field]: value });
+    }
+  };
+
+  const handleContinue = () => {
+    // Si on est en mode édition et qu'il y a des modifications, utiliser editedData
+    // Sinon utiliser les données originales
+    const dataToUse = isEditing && editedData ? editedData : vehicleData;
+    onContinue(dataToUse || undefined);
+  };
+
   if (!vehicleData) {
     return (
       <div className="step-container">
@@ -61,100 +92,261 @@ const ApiResultStep: React.FC<ApiResultStepProps> = ({
     );
   }
 
+  const currentData = isEditing && editedData ? editedData : vehicleData;
+
   return (
-    <div className="info-card">
+    <div className="info-card info-card-editable">
+      {/* Icône de modification en haut à droite */}
+      <div className="edit-button-container">
+        {!isEditing ? (
+          <button
+            type="button"
+            onClick={handleEditClick}
+            className="edit-button"
+            title="Modifier les informations"
+          >
+            ✏️
+          </button>
+        ) : (
+          <div className="edit-controls">
+            <button
+              type="button"
+              onClick={handleSaveEdit}
+              className="save-button"
+              title="Sauvegarder"
+            >
+              ✓
+            </button>
+            <button
+              type="button"
+              onClick={handleCancelEdit}
+              className="cancel-button"
+              title="Annuler"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+      </div>
+
       <h3>Nous avons trouvé votre véhicule</h3>
-      {vehicleData.photo_modele && (
-        <div style={{ textAlign: "center", marginBottom: 16 }}>
+      {currentData.photo_modele && (
+        <div className="vehicle-photo-container">
           <img
-            src={vehicleData.photo_modele}
-            alt={vehicleData.marque + " " + vehicleData.modele}
-            style={{
-              maxHeight: 90,
-              maxWidth: 180,
-              objectFit: "contain",
-              borderRadius: 8,
-            }}
+            src={currentData.photo_modele}
+            alt={currentData.marque + " " + currentData.modele}
+            className="vehicle-photo"
             onError={(e) => {
               e.currentTarget.style.display = "none";
             }}
           />
         </div>
       )}
-      {vehicleData.logo_marque && (
-        <div style={{ textAlign: "center", marginBottom: 8 }}>
+      {currentData.logo_marque && (
+        <div className="brand-logo-container">
           <img
-            src={vehicleData.logo_marque}
-            alt={vehicleData.marque}
-            style={{ maxHeight: 32, maxWidth: 90, objectFit: "contain" }}
+            src={currentData.logo_marque}
+            alt={currentData.marque}
+            className="brand-logo"
             onError={(e) => {
               e.currentTarget.style.display = "none";
             }}
           />
         </div>
       )}
+
       <div className="info-row">
         <span className="info-label">Marque :</span>
-        <span className="info-value">{vehicleData.marque}</span>
+        {isEditing ? (
+          <input
+            type="text"
+            value={currentData.marque}
+            onChange={(e) => handleFieldChange("marque", e.target.value)}
+            className="edit-input"
+          />
+        ) : (
+          <span className="info-value">{currentData.marque}</span>
+        )}
       </div>
+
       <div className="info-row">
         <span className="info-label">Modèle :</span>
-        <span className="info-value">{vehicleData.modele}</span>
+        {isEditing ? (
+          <input
+            type="text"
+            value={currentData.modele}
+            onChange={(e) => handleFieldChange("modele", e.target.value)}
+            className="edit-input"
+          />
+        ) : (
+          <span className="info-value">{currentData.modele}</span>
+        )}
       </div>
+
       <div className="info-row">
         <span className="info-label">Version :</span>
-        <span className="info-value">
-          {vehicleData.version || vehicleData.sra_commercial}
-        </span>
+        {isEditing ? (
+          <input
+            type="text"
+            value={currentData.version || currentData.sra_commercial || ""}
+            onChange={(e) => handleFieldChange("version", e.target.value)}
+            className="edit-input"
+          />
+        ) : (
+          <span className="info-value">
+            {currentData.version || currentData.sra_commercial}
+          </span>
+        )}
       </div>
+
       <div className="info-row">
         <span className="info-label">Énergie :</span>
-        <span className="info-value">
-          {vehicleData.energieLibelle || vehicleData.energieNGC}
-        </span>
+        {isEditing ? (
+          <input
+            type="text"
+            value={currentData.energieLibelle || currentData.energieNGC || ""}
+            onChange={(e) =>
+              handleFieldChange("energieLibelle", e.target.value)
+            }
+            className="edit-input"
+          />
+        ) : (
+          <span className="info-value">
+            {currentData.energieLibelle || currentData.energieNGC}
+          </span>
+        )}
       </div>
+
       <div className="info-row">
         <span className="info-label">Date 1ère mise en circulation :</span>
-        <span className="info-value">{vehicleData.date1erCir_fr}</span>
+        {isEditing ? (
+          <input
+            type="text"
+            value={currentData.date1erCir_fr}
+            onChange={(e) => handleFieldChange("date1erCir_fr", e.target.value)}
+            className="edit-input"
+          />
+        ) : (
+          <span className="info-value">{currentData.date1erCir_fr}</span>
+        )}
       </div>
+
       <div className="info-row">
         <span className="info-label">Puissance fiscale :</span>
-        <span className="info-value">{vehicleData.puisFisc} CV</span>
+        {isEditing ? (
+          <input
+            type="text"
+            value={currentData.puisFisc}
+            onChange={(e) => handleFieldChange("puisFisc", e.target.value)}
+            className="edit-input"
+          />
+        ) : (
+          <span className="info-value">{currentData.puisFisc} CV</span>
+        )}
       </div>
+
       <div className="info-row">
         <span className="info-label">Puissance réelle :</span>
-        <span className="info-value">{vehicleData.puisFiscReelCH}</span>
+        {isEditing ? (
+          <input
+            type="text"
+            value={currentData.puisFiscReelCH}
+            onChange={(e) =>
+              handleFieldChange("puisFiscReelCH", e.target.value)
+            }
+            className="edit-input"
+          />
+        ) : (
+          <span className="info-value">{currentData.puisFiscReelCH}</span>
+        )}
       </div>
+
       <div className="info-row">
         <span className="info-label">Boîte de vitesse :</span>
-        <span className="info-value">
-          {vehicleData.boiteVitesseLibelle || vehicleData.boite_vitesse}
-        </span>
+        {isEditing ? (
+          <input
+            type="text"
+            value={
+              currentData.boiteVitesseLibelle || currentData.boite_vitesse || ""
+            }
+            onChange={(e) =>
+              handleFieldChange("boiteVitesseLibelle", e.target.value)
+            }
+            className="edit-input"
+          />
+        ) : (
+          <span className="info-value">
+            {currentData.boiteVitesseLibelle || currentData.boite_vitesse}
+          </span>
+        )}
       </div>
+
       <div className="info-row">
         <span className="info-label">Carrosserie :</span>
-        <span className="info-value">
-          {vehicleData.carrosserieCG}{" "}
-          {vehicleData.carrosserie && `(${vehicleData.carrosserie})`}
-        </span>
+        {isEditing ? (
+          <input
+            type="text"
+            value={`${currentData.carrosserieCG} ${
+              currentData.carrosserie ? `(${currentData.carrosserie})` : ""
+            }`.trim()}
+            onChange={(e) => handleFieldChange("carrosserieCG", e.target.value)}
+            className="edit-input"
+          />
+        ) : (
+          <span className="info-value">
+            {currentData.carrosserieCG}{" "}
+            {currentData.carrosserie && `(${currentData.carrosserie})`}
+          </span>
+        )}
       </div>
+
       <div className="info-row">
         <span className="info-label">Nombre de portes :</span>
-        <span className="info-value">{vehicleData.nb_portes}</span>
+        {isEditing ? (
+          <input
+            type="text"
+            value={currentData.nb_portes}
+            onChange={(e) => handleFieldChange("nb_portes", e.target.value)}
+            className="edit-input"
+          />
+        ) : (
+          <span className="info-value">{currentData.nb_portes}</span>
+        )}
       </div>
+
       <div className="info-row">
         <span className="info-label">Nombre de places :</span>
-        <span className="info-value">{vehicleData.nr_passagers}</span>
+        {isEditing ? (
+          <input
+            type="text"
+            value={currentData.nr_passagers}
+            onChange={(e) => handleFieldChange("nr_passagers", e.target.value)}
+            className="edit-input"
+          />
+        ) : (
+          <span className="info-value">{currentData.nr_passagers}</span>
+        )}
       </div>
+
       <div className="info-row">
         <span className="info-label">Couleur :</span>
-        <span className="info-value">
-          {vehicleData.couleur || "Non renseignée"}
-        </span>
+        {isEditing ? (
+          <input
+            type="text"
+            value={currentData.couleur || ""}
+            onChange={(e) => handleFieldChange("couleur", e.target.value)}
+            className="edit-input"
+          />
+        ) : (
+          <span className="info-value">
+            {currentData.couleur || "Non renseignée"}
+          </span>
+        )}
       </div>
+
       <ButtonGroup
         onBack={onBack}
-        onContinue={onContinue}
+        onContinue={handleContinue}
         backText="Retour à la recherche"
         continueText="Continuer"
       />
