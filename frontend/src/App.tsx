@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import AdditionalInfoStep from "./components/AdditionalInfoStep";
 import ApiResultStep from "./components/ApiResultStep";
 import InsuranceInfoStep from "./components/InsuranceInfoStep";
-import PersonalInfoStep from "./components/PersonalInfoStep";
+import PersonalInfoStepFirstPart from "./components/PersonalInfoStepFirstPart";
+import PersonalInfoStepSecondPart from "./components/PersonalInfoStepSecondPart";
 import StepIndicator from "./components/StepIndicator";
 import SuccessStep from "./components/SuccessStep";
 import SummaryStep from "./components/SummaryStep";
@@ -19,7 +20,8 @@ const STEPS_ORDER = [
   FormStep.INSURANCE_INFO,
   FormStep.VEHICLE_INFO,
   FormStep.ADDITIONAL_INFO,
-  FormStep.PERSONAL_INFO,
+  FormStep.PERSONAL_INFO_FIRST_PART,
+  FormStep.PERSONAL_INFO_SECOND_PART,
   FormStep.SUMMARY,
   FormStep.SUCCESS,
 ];
@@ -33,7 +35,6 @@ const App: React.FC = () => {
     adresse: "",
     codePostal: "",
     dateNaissance: "",
-    datePermisB: "",
     moisAnneePermis: "",
     profession: "",
     email: "",
@@ -105,7 +106,6 @@ const App: React.FC = () => {
       }
       return;
     }
-
     // Navigation standard
     if (currentIndex > 0) {
       navigateToStep(STEPS_ORDER[currentIndex - 1]);
@@ -214,9 +214,19 @@ const App: React.FC = () => {
           />
         );
 
-      case FormStep.PERSONAL_INFO:
+      case FormStep.PERSONAL_INFO_FIRST_PART:
         return (
-          <PersonalInfoStep
+          <PersonalInfoStepFirstPart
+            formData={formData}
+            onUpdate={updateFormData}
+            onNext={navigateToNextStep}
+            onPrev={navigateToPreviousStep}
+          />
+        );
+
+      case FormStep.PERSONAL_INFO_SECOND_PART:
+        return (
+          <PersonalInfoStepSecondPart
             formData={formData}
             onUpdate={updateFormData}
             onNext={navigateToNextStep}

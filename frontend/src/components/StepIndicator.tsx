@@ -12,7 +12,8 @@ const steps = [
   { key: FormStep.INSURANCE_INFO, label: "Assurance" },
   { key: FormStep.VEHICLE_INFO, label: "Véhicule (suite)" },
   { key: FormStep.ADDITIONAL_INFO, label: "Complément" },
-  { key: FormStep.PERSONAL_INFO, label: "Infos Perso" },
+  { key: FormStep.PERSONAL_INFO_FIRST_PART, label: "Infos Perso (1)" },
+  { key: FormStep.PERSONAL_INFO_SECOND_PART, label: "Infos Perso (2)" },
   { key: FormStep.SUMMARY, label: "Résumé" },
   { key: FormStep.SUCCESS, label: "Succès" },
 ];

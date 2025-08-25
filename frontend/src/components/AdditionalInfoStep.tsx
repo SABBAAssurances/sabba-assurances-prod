@@ -138,15 +138,6 @@ const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
         )}
       </div>
       <div className="form-group">
-        <label className="form-label">Demandes particulières</label>
-        <textarea
-          className="form-textarea"
-          value={formData.demandesParticulieres}
-          onChange={(e) => onUpdate({ demandesParticulieres: e.target.value })}
-          rows={2}
-        />
-      </div>
-      <div className="form-group">
         <label className="form-label">Comment nous avez-vous connu ?</label>
         <select
           className="form-select"
@@ -160,6 +151,15 @@ const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
             </option>
           ))}
         </select>
+      </div>
+      <div className="form-group full-width">
+        <label className="form-label">Demandes particulières</label>
+        <textarea
+          className="form-textarea"
+          value={formData.demandesParticulieres}
+          onChange={(e) => onUpdate({ demandesParticulieres: e.target.value })}
+          rows={2}
+        />
       </div>
       <div className="step-navigation">
         <button type="button" className="btn btn-secondary" onClick={onPrev}>

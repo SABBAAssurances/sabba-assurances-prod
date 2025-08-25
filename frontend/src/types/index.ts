@@ -76,7 +76,6 @@ export interface FormData {
   adresse: string;
   codePostal: string;
   dateNaissance: string;
-  datePermisB: string;
   moisAnneePermis: string;
   profession: string;
   email: string;
@@ -126,7 +125,8 @@ export enum FormStep {
   INSURANCE_INFO = 'insurance_info',
   VEHICLE_INFO = 'vehicle_info',
   ADDITIONAL_INFO = 'additional_info',
-  PERSONAL_INFO = 'personal_info',
+  PERSONAL_INFO_FIRST_PART = 'personal_info_first_part',
+  PERSONAL_INFO_SECOND_PART = 'personal_info_second_part',
   SUMMARY = 'summary',
   SUCCESS = 'success'
 }

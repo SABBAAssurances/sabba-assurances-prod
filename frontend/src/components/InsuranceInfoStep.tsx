@@ -85,6 +85,28 @@ const InsuranceInfoStep: React.FC<InsuranceInfoStepProps> = ({
         )}
       </div>
       <div className="form-group">
+        <label className="form-label">Utilisation de votre véhicule *</label>
+        <select
+          className={`form-select${
+            getError("utilisationVehicule") ? " error" : ""
+          }`}
+          value={formData.utilisationVehicule}
+          onChange={(e) => onUpdate({ utilisationVehicule: e.target.value })}
+        >
+          <option value="">Sélectionner</option>
+          {utilisationOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+        {getError("utilisationVehicule") && (
+          <span className="error-message">
+            {getError("utilisationVehicule")}
+          </span>
+        )}
+      </div>
+      <div className="form-group">
         <label className="form-label">
           Sinistres dans les 36 derniers mois *
         </label>
@@ -134,28 +156,6 @@ const InsuranceInfoStep: React.FC<InsuranceInfoStepProps> = ({
           )}
         </div>
       )}
-      <div className="form-group">
-        <label className="form-label">Utilisation de votre véhicule *</label>
-        <select
-          className={`form-select${
-            getError("utilisationVehicule") ? " error" : ""
-          }`}
-          value={formData.utilisationVehicule}
-          onChange={(e) => onUpdate({ utilisationVehicule: e.target.value })}
-        >
-          <option value="">Sélectionner</option>
-          {utilisationOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-        {getError("utilisationVehicule") && (
-          <span className="error-message">
-            {getError("utilisationVehicule")}
-          </span>
-        )}
-      </div>
       <div className="step-navigation">
         <button type="button" className="btn btn-secondary" onClick={onPrev}>
           Retour

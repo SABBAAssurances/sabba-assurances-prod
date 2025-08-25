@@ -52,7 +52,7 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
 
   return (
     <form className="form-container" onSubmit={handleSubmit} autoComplete="off">
-      <div className="form-group">
+      <div className="form-group full-width">
         <label className="form-label" htmlFor="plaque">
           Retrouver mon véhicule par :
         </label>
@@ -68,25 +68,27 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
           required
         />
       </div>
-      <button
-        className="btn btn-primary"
-        type="submit"
-        disabled={loading || !isPlaqueValid}
-      >
-        {loading ? (
-          <span
-            className="spinner"
-            style={{
-              width: 22,
-              height: 22,
-              display: "inline-block",
-              verticalAlign: "middle",
-            }}
-          />
-        ) : (
-          "Rechercher le véhicule"
-        )}
-      </button>
+      <div className="step-navigation">
+        <button
+          className="btn btn-primary"
+          type="submit"
+          disabled={loading || !isPlaqueValid}
+        >
+          {loading ? (
+            <span
+              className="spinner"
+              style={{
+                width: 22,
+                height: 22,
+                display: "inline-block",
+                verticalAlign: "middle",
+              }}
+            />
+          ) : (
+            "Rechercher le véhicule"
+          )}
+        </button>
+      </div>
 
       {error && (
         <div className="error-message" style={{ marginBottom: "16px" }}>

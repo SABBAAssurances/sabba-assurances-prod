@@ -50,10 +50,18 @@ body {
   border-radius: 0;
   box-shadow: none;
   margin-bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
 }
 
 .form-group {
   margin-bottom: 22px;
+}
+
+/* Champs qui doivent occuper toute la largeur */
+.form-group.full-width {
+  grid-column: 1 / -1;
 }
 
 .form-label {
@@ -173,6 +181,7 @@ body {
   gap: 10px;
   border-top: none;
   padding-top: 0;
+  grid-column: 1 / -1;
 }
 
 .step-indicator {
@@ -327,8 +336,6 @@ body {
 
 @media (max-width: 600px) {
   .app-container {
-    padding: 0;
-    margin: 0;
     min-height: 100vh;
     border-radius: 0;
     box-shadow: none;
@@ -338,6 +345,12 @@ body {
   }
   .step-indicator {
     margin-bottom: 18px;
+  }
+  
+  /* Passage à 1 colonne sur mobile */
+  .form-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 

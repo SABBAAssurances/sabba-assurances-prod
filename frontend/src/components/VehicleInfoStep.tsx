@@ -95,23 +95,6 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
         )}
       </div>
       <div className="form-group">
-        <label className="form-label">Valeur d'achat ou estimée (€) *</label>
-        <input
-          className={`form-input${getError("valeurVehicule") ? " error" : ""}`}
-          type="number"
-          min={0}
-          value={formData.valeurVehicule ?? ""}
-          onChange={(e) => {
-            const value = Number(e.target.value);
-            onUpdate({ valeurVehicule: value });
-            onVehicleDataUpdate({ valeurVehicule: value } as any);
-          }}
-        />
-        {getError("valeurVehicule") && (
-          <span className="error-message">{getError("valeurVehicule")}</span>
-        )}
-      </div>
-      <div className="form-group">
         <label className="form-label">Date de mise en circulation *</label>
         <input
           className={`form-input${
@@ -143,6 +126,24 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
             onVehicleDataUpdate({ immat: e.target.value });
           }}
         />
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">Valeur d'achat ou estimée (€) *</label>
+        <input
+          className={`form-input${getError("valeurVehicule") ? " error" : ""}`}
+          type="number"
+          min={0}
+          value={formData.valeurVehicule ?? ""}
+          onChange={(e) => {
+            const value = Number(e.target.value);
+            onUpdate({ valeurVehicule: value });
+            onVehicleDataUpdate({ valeurVehicule: value } as any);
+          }}
+        />
+        {getError("valeurVehicule") && (
+          <span className="error-message">{getError("valeurVehicule")}</span>
+        )}
       </div>
       <div className="step-navigation">
         <button type="button" className="btn btn-secondary" onClick={onPrev}>
