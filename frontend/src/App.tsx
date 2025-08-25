@@ -40,6 +40,7 @@ const App: React.FC = () => {
     telephone: "",
     bonusMalus: "0.50",
     sinistres36Mois: false,
+    sinistres36MoisDetails: "",
     utilisationVehicule: "",
     marqueVehicule: "",
     typeVersion: "",
@@ -48,7 +49,7 @@ const App: React.FC = () => {
     immatriculation: "",
     modeFinancement: "",
     lieuStationnement: "",
-    choixGaranties: "",
+    choixGaranties: "Tous Risques",
     demandesParticulieres: "",
     commentConnaissance: "",
   });

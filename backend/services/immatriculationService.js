@@ -14,6 +14,7 @@ class ImmatriculationService {
         return {
           success: true,
           data: this.getMockVehicleData(plaque),
+          httpStatus: 200,
         };
       }
 

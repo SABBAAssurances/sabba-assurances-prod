@@ -5,7 +5,8 @@ const bonusOptions = Array.from({ length: 151 }, (_, i) =>
   (0.5 + i * 0.01).toFixed(2)
 );
 const utilisationOptions = [
-  { value: "Moins de 7000km", label: "Moins de 7000km" },
+  { value: "Moins de 7000km", label: "Moins de 7000km / an" },
+  { value: "7000 à 9000km/an", label: "7000 à 9000km/an / an" },
   { value: "Loisirs illimité", label: "Loisirs illimité" },
   {
     value: "Déplacement privé & travail illimité",
@@ -31,6 +32,9 @@ const InsuranceInfoStep: React.FC<InsuranceInfoStepProps> = ({
   const isValid =
     formData.bonusMalus &&
     formData.sinistres36Mois !== undefined &&
+    (formData.sinistres36Mois === false ||
+      (formData.sinistres36Mois === true &&
+        formData.sinistres36MoisDetails.trim())) &&
     formData.utilisationVehicule;
 
   const validate = (): boolean => {
@@ -41,6 +45,14 @@ const InsuranceInfoStep: React.FC<InsuranceInfoStepProps> = ({
       newErrors.push({ field: "sinistres36Mois", message: "Champ requis" });
     if (!formData.utilisationVehicule)
       newErrors.push({ field: "utilisationVehicule", message: "Champ requis" });
+    if (
+      formData.sinistres36Mois === true &&
+      !formData.sinistres36MoisDetails.trim()
+    )
+      newErrors.push({
+        field: "sinistres36MoisDetails",
+        message: "Veuillez détailler vos sinistres",
+      });
     setErrors(newErrors);
     return newErrors.length === 0;
   };
@@ -100,6 +112,28 @@ const InsuranceInfoStep: React.FC<InsuranceInfoStepProps> = ({
           <span className="error-message">{getError("sinistres36Mois")}</span>
         )}
       </div>
+
+      {formData.sinistres36Mois === true && (
+        <div className="form-group">
+          <label className="form-label">Détails des sinistres *</label>
+          <textarea
+            className={`form-textarea${
+              getError("sinistres36MoisDetails") ? " error" : ""
+            }`}
+            value={formData.sinistres36MoisDetails}
+            onChange={(e) =>
+              onUpdate({ sinistres36MoisDetails: e.target.value })
+            }
+            placeholder="Décrivez brièvement les circonstances de vos sinistres..."
+            rows={3}
+          />
+          {getError("sinistres36MoisDetails") && (
+            <span className="error-message">
+              {getError("sinistres36MoisDetails")}
+            </span>
+          )}
+        </div>
+      )}
       <div className="form-group">
         <label className="form-label">Utilisation de votre véhicule *</label>
         <select

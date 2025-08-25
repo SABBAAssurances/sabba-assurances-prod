@@ -85,6 +85,7 @@ export interface FormData {
   // Informations d'assurance
   bonusMalus: string;
   sinistres36Mois: boolean;
+  sinistres36MoisDetails: string;
   utilisationVehicule: string;
   
   // Informations du véhicule

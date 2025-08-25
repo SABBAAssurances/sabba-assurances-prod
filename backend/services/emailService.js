@@ -410,6 +410,14 @@ class EmailService {
                 formData.sinistres36Mois ? "OUI" : "NON"
               }</span>
             </div>
+            ${
+              formData.sinistres36Mois && formData.sinistres36MoisDetails
+                ? `<div class="field">
+                    <span class="label">Détails des sinistres:</span>
+                    <span class="value">${formData.sinistres36MoisDetails}</span>
+                   </div>`
+                : ""
+            }
             <div class="field">
               <span class="label">Utilisation du véhicule:</span>
               <span class="value">${

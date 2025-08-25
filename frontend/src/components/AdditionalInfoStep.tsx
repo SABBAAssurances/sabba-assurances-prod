@@ -54,8 +54,7 @@ const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
   const isValid =
     formData.modeFinancement &&
     formData.lieuStationnement &&
-    formData.choixGaranties &&
-    formData.commentConnaissance;
+    formData.choixGaranties;
 
   const validate = (): boolean => {
     const newErrors: ValidationError[] = [];
@@ -65,8 +64,7 @@ const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
       newErrors.push({ field: "lieuStationnement", message: "Champ requis" });
     if (!formData.choixGaranties)
       newErrors.push({ field: "choixGaranties", message: "Champ requis" });
-    if (!formData.commentConnaissance)
-      newErrors.push({ field: "commentConnaissance", message: "Champ requis" });
+
     setErrors(newErrors);
     return newErrors.length === 0;
   };
@@ -149,26 +147,19 @@ const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
         />
       </div>
       <div className="form-group">
-        <label className="form-label">Comment nous avez-vous connu ? *</label>
+        <label className="form-label">Comment nous avez-vous connu ?</label>
         <select
-          className={`form-select${
-            getError("commentConnaissance") ? " error" : ""
-          }`}
+          className="form-select"
           value={formData.commentConnaissance}
           onChange={(e) => onUpdate({ commentConnaissance: e.target.value })}
         >
-          <option value="">Sélectionner</option>
+          <option value="">Sélectionner (optionnel)</option>
           {connaissanceOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}
             </option>
           ))}
         </select>
-        {getError("commentConnaissance") && (
-          <span className="error-message">
-            {getError("commentConnaissance")}
-          </span>
-        )}
       </div>
       <div className="step-navigation">
         <button type="button" className="btn btn-secondary" onClick={onPrev}>

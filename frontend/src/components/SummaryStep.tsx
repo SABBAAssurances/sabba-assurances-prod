@@ -85,6 +85,14 @@ const SummaryStep: React.FC<SummaryStepProps> = ({
             {formData.sinistres36Mois ? "OUI" : "NON"}
           </span>
         </div>
+        {formData.sinistres36Mois && formData.sinistres36MoisDetails && (
+          <div className="info-row">
+            <span className="info-label">Détails des sinistres :</span>
+            <span className="info-value">
+              {formData.sinistres36MoisDetails}
+            </span>
+          </div>
+        )}
         <div className="info-row">
           <span className="info-label">Utilisation :</span>
           <span className="info-value">{formData.utilisationVehicule}</span>
