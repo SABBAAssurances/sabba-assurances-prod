@@ -74,6 +74,7 @@ export interface FormData {
   // Informations personnelles
   nomComplet: string;
   adresse: string;
+  codePostal: string;
   dateNaissance: string;
   datePermisB: string;
   moisAnneePermis: string;

@@ -19,6 +19,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
   const isValid =
     formData.nomComplet.trim() &&
     formData.adresse.trim() &&
+    formData.codePostal.trim() &&
     formData.dateNaissance &&
     formData.datePermisB &&
     formData.moisAnneePermis &&
@@ -32,6 +33,8 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
       newErrors.push({ field: "nomComplet", message: "Champ requis" });
     if (!formData.adresse.trim())
       newErrors.push({ field: "adresse", message: "Champ requis" });
+    if (!formData.codePostal.trim())
+      newErrors.push({ field: "codePostal", message: "Champ requis" });
     if (!formData.dateNaissance)
       newErrors.push({ field: "dateNaissance", message: "Champ requis" });
     if (!formData.datePermisB)
@@ -71,7 +74,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
         )}
       </div>
       <div className="form-group">
-        <label className="form-label">Adresse / Ville / CP *</label>
+        <label className="form-label">Adresse / Ville *</label>
         <input
           className={`form-input${getError("adresse") ? " error" : ""}`}
           type="text"
@@ -80,6 +83,19 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
         />
         {getError("adresse") && (
           <span className="error-message">{getError("adresse")}</span>
+        )}
+      </div>
+      <div className="form-group">
+        <label className="form-label">Code postal *</label>
+        <input
+          className={`form-input${getError("codePostal") ? " error" : ""}`}
+          type="text"
+          value={formData.codePostal}
+          onChange={(e) => onUpdate({ codePostal: e.target.value })}
+          placeholder="75001"
+        />
+        {getError("codePostal") && (
+          <span className="error-message">{getError("codePostal")}</span>
         )}
       </div>
       <div className="form-group">

@@ -19,6 +19,7 @@ const App: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     nomComplet: "",
     adresse: "",
+    codePostal: "",
     dateNaissance: "",
     datePermisB: "",
     moisAnneePermis: "",

@@ -364,6 +364,12 @@ class EmailService {
               <span class="value">${formData.adresse || "Non renseigné"}</span>
             </div>
             <div class="field">
+              <span class="label">Code postal:</span>
+              <span class="value">${
+                formData.codePostal || "Non renseigné"
+              }</span>
+            </div>
+            <div class="field">
               <span class="label">Date de naissance:</span>
               <span class="value">${formatDate(formData.dateNaissance)}</span>
             </div>
