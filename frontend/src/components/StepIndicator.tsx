@@ -9,10 +9,10 @@ interface StepIndicatorProps {
 const steps = [
   { key: FormStep.VEHICLE_SEARCH, label: "Plaque" },
   { key: FormStep.API_RESULT, label: "Véhicule" },
-  { key: FormStep.PERSONAL_INFO, label: "Infos Perso" },
   { key: FormStep.INSURANCE_INFO, label: "Assurance" },
   { key: FormStep.VEHICLE_INFO, label: "Véhicule (suite)" },
   { key: FormStep.ADDITIONAL_INFO, label: "Complément" },
+  { key: FormStep.PERSONAL_INFO, label: "Infos Perso" },
   { key: FormStep.SUMMARY, label: "Résumé" },
   { key: FormStep.SUCCESS, label: "Succès" },
 ];

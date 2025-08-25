@@ -21,7 +21,6 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
     formData.adresse.trim() &&
     formData.codePostal.trim() &&
     formData.dateNaissance &&
-    formData.datePermisB &&
     formData.moisAnneePermis &&
     formData.profession.trim() &&
     formData.email.trim() &&
@@ -37,8 +36,6 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
       newErrors.push({ field: "codePostal", message: "Champ requis" });
     if (!formData.dateNaissance)
       newErrors.push({ field: "dateNaissance", message: "Champ requis" });
-    if (!formData.datePermisB)
-      newErrors.push({ field: "datePermisB", message: "Champ requis" });
     if (!formData.moisAnneePermis)
       newErrors.push({ field: "moisAnneePermis", message: "Champ requis" });
     if (!formData.profession.trim())
@@ -108,18 +105,6 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
         />
         {getError("dateNaissance") && (
           <span className="error-message">{getError("dateNaissance")}</span>
-        )}
-      </div>
-      <div className="form-group">
-        <label className="form-label">Date de permis B *</label>
-        <input
-          className={`form-input${getError("datePermisB") ? " error" : ""}`}
-          type="date"
-          value={formData.datePermisB}
-          onChange={(e) => onUpdate({ datePermisB: e.target.value })}
-        />
-        {getError("datePermisB") && (
-          <span className="error-message">{getError("datePermisB")}</span>
         )}
       </div>
       <div className="form-group">

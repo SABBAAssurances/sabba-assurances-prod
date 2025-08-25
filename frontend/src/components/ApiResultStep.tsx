@@ -4,7 +4,7 @@ import { VehicleData } from "../types";
 interface ApiResultStepProps {
   vehicleData: VehicleData | null;
   onBack: () => void;
-  onContinue: (modifiedData?: VehicleData) => void;
+  onContinue: (modifiedData?: VehicleData | null) => void;
 }
 
 interface ButtonGroupProps {
@@ -63,7 +63,7 @@ const ApiResultStep: React.FC<ApiResultStepProps> = ({
     // Si on est en mode édition et qu'il y a des modifications, utiliser editedData
     // Sinon utiliser les données originales
     const dataToUse = isEditing && editedData ? editedData : vehicleData;
-    onContinue(dataToUse || undefined);
+    onContinue(dataToUse || null);
   };
 
   if (!vehicleData) {
@@ -83,7 +83,7 @@ const ApiResultStep: React.FC<ApiResultStepProps> = ({
           </div>
           <ButtonGroup
             onBack={onBack}
-            onContinue={onContinue}
+            onContinue={() => onContinue(null)}
             backText="Retour à la recherche"
             continueText="Saisir manuellement"
           />

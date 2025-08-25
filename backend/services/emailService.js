@@ -374,10 +374,6 @@ class EmailService {
               <span class="value">${formatDate(formData.dateNaissance)}</span>
             </div>
             <div class="field">
-              <span class="label">Date de permis B:</span>
-              <span class="value">${formatDate(formData.datePermisB)}</span>
-            </div>
-            <div class="field">
               <span class="label">Mois/année permis:</span>
               <span class="value">${
                 formData.moisAnneePermis || "Non renseigné"

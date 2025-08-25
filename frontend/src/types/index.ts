@@ -122,10 +122,10 @@ export interface EmailResponse {
 export enum FormStep {
   VEHICLE_SEARCH = 'vehicle_search',
   API_RESULT = 'api_result',
-  PERSONAL_INFO = 'personal_info',
   INSURANCE_INFO = 'insurance_info',
   VEHICLE_INFO = 'vehicle_info',
   ADDITIONAL_INFO = 'additional_info',
+  PERSONAL_INFO = 'personal_info',
   SUMMARY = 'summary',
   SUCCESS = 'success'
 }

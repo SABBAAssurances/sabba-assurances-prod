@@ -12,6 +12,18 @@ import { apiService } from "./services/api";
 import "./styles/App.css";
 import { FormData, FormStep, VehicleData } from "./types";
 
+// Ordre centralisé des étapes
+const STEPS_ORDER = [
+  FormStep.VEHICLE_SEARCH,
+  FormStep.API_RESULT,
+  FormStep.INSURANCE_INFO,
+  FormStep.VEHICLE_INFO,
+  FormStep.ADDITIONAL_INFO,
+  FormStep.PERSONAL_INFO,
+  FormStep.SUMMARY,
+  FormStep.SUCCESS,
+];
+
 const App: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<FormStep>(
     FormStep.VEHICLE_SEARCH
@@ -26,7 +38,7 @@ const App: React.FC = () => {
     profession: "",
     email: "",
     telephone: "",
-    bonusMalus: "1.00",
+    bonusMalus: "0.50",
     sinistres36Mois: false,
     utilisationVehicule: "",
     marqueVehicule: "",
@@ -64,6 +76,41 @@ const App: React.FC = () => {
     checkServerHealth();
   }, []);
 
+  // Fonctions de navigation centralisées
+  const getCurrentStepIndex = () => STEPS_ORDER.indexOf(currentStep);
+
+  const navigateToStep = (step: FormStep) => {
+    setCurrentStep(step);
+    setError(null);
+    setSuccess(null);
+  };
+
+  const navigateToNextStep = () => {
+    const currentIndex = getCurrentStepIndex();
+    if (currentIndex < STEPS_ORDER.length - 1) {
+      navigateToStep(STEPS_ORDER[currentIndex + 1]);
+    }
+  };
+
+  const navigateToPreviousStep = () => {
+    const currentIndex = getCurrentStepIndex();
+
+    // Gestion des cas spéciaux
+    if (currentStep === FormStep.INSURANCE_INFO) {
+      if (!vehicleData) {
+        navigateToStep(FormStep.VEHICLE_SEARCH);
+      } else {
+        navigateToStep(FormStep.API_RESULT);
+      }
+      return;
+    }
+
+    // Navigation standard
+    if (currentIndex > 0) {
+      navigateToStep(STEPS_ORDER[currentIndex - 1]);
+    }
+  };
+
   const updateFormData = (updates: Partial<FormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }));
   };
@@ -73,40 +120,6 @@ const App: React.FC = () => {
       const newData = prev ? { ...prev, ...updates } : null;
       return newData;
     });
-  };
-
-  const nextStep = () => {
-    const steps = Object.values(FormStep);
-    const currentIndex = steps.indexOf(currentStep);
-    if (currentIndex < steps.length - 1) {
-      setCurrentStep(steps[currentIndex + 1]);
-      setError(null);
-      setSuccess(null);
-    }
-  };
-
-  const prevStep = () => {
-    const steps = Object.values(FormStep);
-    const currentIndex = steps.indexOf(currentStep);
-    if (currentIndex > 0) {
-      setCurrentStep(steps[currentIndex - 1]);
-      setError(null);
-      setSuccess(null);
-    }
-  };
-
-  const prevStepFromPersonalInfo = () => {
-    // Si aucun véhicule n'a été trouvé, retourner à VEHICLE_SEARCH
-    if (!vehicleData) {
-      setCurrentStep(FormStep.VEHICLE_SEARCH);
-      setError(null);
-      setSuccess(null);
-    } else {
-      // Sinon, retourner à API_RESULT
-      setCurrentStep(FormStep.API_RESULT);
-      setError(null);
-      setSuccess(null);
-    }
   };
 
   const handleVehicleSearch = async (plaque: string) => {
@@ -125,16 +138,15 @@ const App: React.FC = () => {
           dateMiseCirculation: result.data.date1erCir_us,
           immatriculation: result.data.immat,
         });
-        setCurrentStep(FormStep.API_RESULT);
+        navigateToStep(FormStep.API_RESULT);
       } else {
-        // Véhicule non trouvé ou erreur
         if (result.httpCode !== 404) {
           setError(
             "Une erreur est survenue lors de la récupération des informations."
           );
         }
         setVehicleData(null);
-        setCurrentStep(FormStep.API_RESULT);
+        navigateToStep(FormStep.API_RESULT);
       }
     } catch (error) {
       // En cas d'erreur, on affiche aussi le résultat
@@ -142,26 +154,18 @@ const App: React.FC = () => {
       setError(
         "Une erreur est survenue lors de la récupération des informations."
       );
-      setCurrentStep(FormStep.API_RESULT);
+      navigateToStep(FormStep.API_RESULT);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleApiResultBack = () => {
-    setCurrentStep(FormStep.VEHICLE_SEARCH);
-    setError(null);
-    setSuccess(null);
-  };
-
-  const handleApiResultContinue = (modifiedData?: VehicleData) => {
+  const handleApiResultContinue = (modifiedData?: VehicleData | null) => {
     // Si des données modifiées sont fournies, les utiliser à la place des données originales
     if (modifiedData) {
       setVehicleData(modifiedData);
     }
-    setCurrentStep(FormStep.PERSONAL_INFO);
-    setError(null);
-    setSuccess(null);
+    navigateToNextStep();
   };
 
   const handleSubmit = async () => {
@@ -178,7 +182,7 @@ const App: React.FC = () => {
         setSuccess(
           "Votre demande a été envoyée avec succès ! Nous vous contacterons rapidement."
         );
-        setCurrentStep(FormStep.SUCCESS);
+        navigateToStep(FormStep.SUCCESS);
       } else {
         setError(result.error || "Erreur lors de l'envoi de la demande");
       }
@@ -204,7 +208,7 @@ const App: React.FC = () => {
         return (
           <ApiResultStep
             vehicleData={vehicleData}
-            onBack={handleApiResultBack}
+            onBack={navigateToPreviousStep}
             onContinue={handleApiResultContinue}
           />
         );
@@ -214,8 +218,8 @@ const App: React.FC = () => {
           <PersonalInfoStep
             formData={formData}
             onUpdate={updateFormData}
-            onNext={nextStep}
-            onPrev={prevStepFromPersonalInfo}
+            onNext={navigateToNextStep}
+            onPrev={navigateToPreviousStep}
           />
         );
 
@@ -224,8 +228,8 @@ const App: React.FC = () => {
           <InsuranceInfoStep
             formData={formData}
             onUpdate={updateFormData}
-            onNext={nextStep}
-            onPrev={prevStep}
+            onNext={navigateToNextStep}
+            onPrev={navigateToPreviousStep}
           />
         );
 
@@ -236,8 +240,8 @@ const App: React.FC = () => {
             vehicleData={vehicleData}
             onUpdate={updateFormData}
             onVehicleDataUpdate={updateVehicleData}
-            onNext={nextStep}
-            onPrev={prevStep}
+            onNext={navigateToNextStep}
+            onPrev={navigateToPreviousStep}
           />
         );
 
@@ -246,8 +250,8 @@ const App: React.FC = () => {
           <AdditionalInfoStep
             formData={formData}
             onUpdate={updateFormData}
-            onNext={nextStep}
-            onPrev={prevStep}
+            onNext={navigateToNextStep}
+            onPrev={navigateToPreviousStep}
           />
         );
 
@@ -257,7 +261,7 @@ const App: React.FC = () => {
             formData={formData}
             vehicleData={vehicleData}
             onSubmit={handleSubmit}
-            onPrev={prevStep}
+            onPrev={navigateToPreviousStep}
             loading={loading}
             error={error}
             success={success}
