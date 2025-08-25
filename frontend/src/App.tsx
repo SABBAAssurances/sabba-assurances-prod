@@ -48,6 +48,14 @@ const App: React.FC = () => {
     valeurVehicule: undefined,
     dateMiseCirculation: "",
     immatriculation: "",
+    energie: "",
+    puissanceFiscale: "",
+    puissanceReelle: "",
+    boiteVitesse: "",
+    carrosserie: "",
+    nombrePortes: "",
+    nombrePlaces: "",
+    couleur: "",
     modeFinancement: "",
     lieuStationnement: "",
     choixGaranties: "Tous Risques",
@@ -138,6 +146,17 @@ const App: React.FC = () => {
           typeVersion: result.data.modele,
           dateMiseCirculation: result.data.date1erCir_us,
           immatriculation: result.data.immat,
+          energie: result.data.energieLibelle || result.data.energieNGC || "",
+          puissanceFiscale: result.data.puisFisc || "",
+          puissanceReelle: result.data.puisFiscReelCH || "",
+          boiteVitesse:
+            result.data.boiteVitesseLibelle || result.data.boite_vitesse || "",
+          carrosserie: `${result.data.carrosserieCG || ""} ${
+            result.data.carrosserie ? `(${result.data.carrosserie})` : ""
+          }`.trim(),
+          nombrePortes: result.data.nb_portes || "",
+          nombrePlaces: result.data.nr_passagers || "",
+          couleur: result.data.couleur || "",
         });
         navigateToStep(FormStep.API_RESULT);
       } else {
@@ -165,6 +184,24 @@ const App: React.FC = () => {
     // Si des données modifiées sont fournies, les utiliser à la place des données originales
     if (modifiedData) {
       setVehicleData(modifiedData);
+      updateFormData({
+        marqueVehicule: modifiedData.marque,
+        typeVersion: modifiedData.modele,
+        dateMiseCirculation: modifiedData.date1erCir_us,
+        immatriculation: modifiedData.immat,
+        // Ajout des autres champs du véhicule
+        energie: modifiedData.energieLibelle || modifiedData.energieNGC || "",
+        puissanceFiscale: modifiedData.puisFisc || "",
+        puissanceReelle: modifiedData.puisFiscReelCH || "",
+        boiteVitesse:
+          modifiedData.boiteVitesseLibelle || modifiedData.boite_vitesse || "",
+        carrosserie: `${modifiedData.carrosserieCG || ""} ${
+          modifiedData.carrosserie ? `(${modifiedData.carrosserie})` : ""
+        }`.trim(),
+        nombrePortes: modifiedData.nb_portes || "",
+        nombrePlaces: modifiedData.nr_passagers || "",
+        couleur: modifiedData.couleur || "",
+      });
     }
     navigateToNextStep();
   };

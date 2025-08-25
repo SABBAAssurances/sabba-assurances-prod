@@ -93,6 +93,14 @@ export interface FormData {
   valeurVehicule: number | undefined;
   dateMiseCirculation: string;
   immatriculation: string;
+  energie: string;
+  puissanceFiscale: string;
+  puissanceReelle: string;
+  boiteVitesse: string;
+  carrosserie: string;
+  nombrePortes: string;
+  nombrePlaces: string;
+  couleur: string;
   
   // Informations complémentaires
   modeFinancement: string;

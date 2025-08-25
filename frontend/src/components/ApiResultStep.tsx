@@ -40,12 +40,15 @@ const ApiResultStep: React.FC<ApiResultStepProps> = ({
 
   const handleEditClick = () => {
     setIsEditing(true);
-    setEditedData(vehicleData ? { ...vehicleData } : null);
+    // Utiliser les données actuelles (modifiées ou originales) pour l'édition
+    const currentData = editedData ? editedData : vehicleData;
+    setEditedData(currentData ? { ...currentData } : null);
   };
 
   const handleSaveEdit = () => {
     setIsEditing(false);
-    // Les données modifiées sont maintenant dans editedData
+    // Les données modifiées sont maintenant sauvegardées dans editedData
+    // et seront utilisées lors du handleContinue
   };
 
   const handleCancelEdit = () => {
@@ -60,9 +63,9 @@ const ApiResultStep: React.FC<ApiResultStepProps> = ({
   };
 
   const handleContinue = () => {
-    // Si on est en mode édition et qu'il y a des modifications, utiliser editedData
+    // Si on a des données modifiées (même si on n'est plus en mode édition), les utiliser
     // Sinon utiliser les données originales
-    const dataToUse = isEditing && editedData ? editedData : vehicleData;
+    const dataToUse = editedData ? editedData : vehicleData;
     onContinue(dataToUse || null);
   };
 
@@ -92,7 +95,7 @@ const ApiResultStep: React.FC<ApiResultStepProps> = ({
     );
   }
 
-  const currentData = isEditing && editedData ? editedData : vehicleData;
+  const currentData = editedData ? editedData : vehicleData;
 
   return (
     <div className="info-card info-card-editable">
