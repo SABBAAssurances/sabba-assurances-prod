@@ -2,16 +2,17 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: border-box;  
+  font-family: 'Epilogue', 'Segoe UI', Arial, sans-serif;
 }
 
 body {
-  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   background: #fff;
   color: #151e29;
   line-height: 1.6;
   min-height: 100vh;
 }
+
 
 .app-container {
   width: 100%;
@@ -146,7 +147,7 @@ body {
   background: #FFFFFF;
   color: #151e29;
   margin-right: 8px;
-  border: 1.5px solid #151e29;
+  border: 1.5px solid rgba(21, 30, 41, 0.50);
 }
 
 .btn-secondary:hover {
@@ -216,8 +217,7 @@ body {
 }
 
 .info-card {
-  background: #f5f6fa;
-  border: 1.5px solid #151e29;
+  border: 1.5px solid rgba(21, 30, 41, 0.18);
   border-radius: 12px;
   padding: 30px;
   margin-bottom: 18px;
