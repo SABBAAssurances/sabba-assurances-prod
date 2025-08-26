@@ -15,7 +15,7 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => {
       <ProgressBar
         completed={percent}
         bgColor="#151e29"
-        baseBgColor="#f5f6fa"
+        baseBgColor="#fff"
         height="10px"
         isLabelVisible={false}
         borderRadius="8px"
