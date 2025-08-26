@@ -352,6 +352,12 @@ body {
     grid-template-columns: 1fr;
     gap: 16px;
   }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
 }
 
 .form-checkbox,
@@ -419,7 +425,7 @@ body {
   
   padding: 40px;
   border-radius: 16px;
-  border: 2px solid #4CAF50;
+  border: 2px solid #151e29;
   box-shadow: 0 8px 32px rgba(76, 175, 80, 0.1);
 }
 

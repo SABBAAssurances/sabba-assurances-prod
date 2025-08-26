@@ -12,7 +12,7 @@ const SuccessStep: React.FC = () => {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <circle cx="12" cy="12" r="10" fill="#4CAF50" />
+            <circle cx="12" cy="12" r="10" fill="#151e29" />
             <path
               d="M9 12l2 2 4-4"
               stroke="white"
@@ -24,8 +24,8 @@ const SuccessStep: React.FC = () => {
         </div>
         <h2 className="success-title">Demande envoyée avec succès !</h2>
         <p className="success-message">
-          Nous vous contacterons rapidement pour traiter votre demande de devis
-          d'assurance.
+          Nous vous remercions pour votre confiance et nous vous recontacterons
+          au plus vite.
         </p>
       </div>
     </div>

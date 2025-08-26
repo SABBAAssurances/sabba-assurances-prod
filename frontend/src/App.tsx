@@ -14,7 +14,7 @@ import "./styles/App.css";
 import { FormData, FormStep, VehicleData } from "./types";
 
 // Ordre centralisé des étapes
-const STEPS_ORDER = [
+export const STEPS_ORDER = [
   FormStep.VEHICLE_SEARCH,
   FormStep.API_RESULT,
   FormStep.VEHICLE_INFO,

@@ -1,26 +1,15 @@
 import ProgressBar from "@ramonak/react-progress-bar";
 import React from "react";
+import { STEPS_ORDER } from "../App";
 import { FormStep } from "../types";
 
 interface StepIndicatorProps {
   currentStep: FormStep;
 }
 
-const steps = [
-  { key: FormStep.VEHICLE_SEARCH, label: "Plaque" },
-  { key: FormStep.API_RESULT, label: "Véhicule" },
-  { key: FormStep.INSURANCE_INFO, label: "Assurance" },
-  { key: FormStep.VEHICLE_INFO, label: "Véhicule (suite)" },
-  { key: FormStep.ADDITIONAL_INFO, label: "Complément" },
-  { key: FormStep.PERSONAL_INFO_FIRST_PART, label: "Infos Perso (1)" },
-  { key: FormStep.PERSONAL_INFO_SECOND_PART, label: "Infos Perso (2)" },
-  { key: FormStep.SUMMARY, label: "Résumé" },
-  { key: FormStep.SUCCESS, label: "Succès" },
-];
-
 const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => {
-  const currentIndex = steps.findIndex((s) => s.key === currentStep);
-  const percent = Math.round(((currentIndex + 1) / steps.length) * 100);
+  const currentIndex = STEPS_ORDER.indexOf(currentStep);
+  const percent = Math.round(((currentIndex + 1) / STEPS_ORDER.length) * 100);
   return (
     <div className="step-indicator">
       <ProgressBar

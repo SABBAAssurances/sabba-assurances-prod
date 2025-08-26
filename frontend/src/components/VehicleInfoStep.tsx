@@ -98,6 +98,47 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
             <span className="error-message">{getError("typeVersion")}</span>
           )}
         </div>
+
+        <div className="form-group">
+          <label className="form-label">Nombre de CV fiscaux *</label>
+          <input
+            className={`form-input${
+              getError("nombreCVFiscaux") ? " error" : ""
+            }`}
+            type="number"
+            min={0}
+            step="0.5"
+            value={formData.nombreCVFiscaux}
+            onChange={(e) => {
+              onUpdate({ nombreCVFiscaux: e.target.value });
+              onVehicleDataUpdate({ puisFisc: e.target.value });
+            }}
+          />
+          {getError("nombreCVFiscaux") && (
+            <span className="error-message">{getError("nombreCVFiscaux")}</span>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Valeur d'achat ou estimée (€) *</label>
+          <input
+            className={`form-input${
+              getError("valeurVehicule") ? " error" : ""
+            }`}
+            type="number"
+            min={0}
+            value={formData.valeurVehicule ?? ""}
+            onChange={(e) => {
+              const value = Number(e.target.value);
+              onUpdate({ valeurVehicule: value });
+              onVehicleDataUpdate({ valeurVehicule: value } as any);
+            }}
+          />
+          {getError("valeurVehicule") && (
+            <span className="error-message">{getError("valeurVehicule")}</span>
+          )}
+        </div>
+
         <div className="form-group">
           <label className="form-label">Date de mise en circulation *</label>
           <input
@@ -130,46 +171,6 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
               onVehicleDataUpdate({ immat: e.target.value });
             }}
           />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Valeur d'achat ou estimée (€) *</label>
-          <input
-            className={`form-input${
-              getError("valeurVehicule") ? " error" : ""
-            }`}
-            type="number"
-            min={0}
-            value={formData.valeurVehicule ?? ""}
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              onUpdate({ valeurVehicule: value });
-              onVehicleDataUpdate({ valeurVehicule: value } as any);
-            }}
-          />
-          {getError("valeurVehicule") && (
-            <span className="error-message">{getError("valeurVehicule")}</span>
-          )}
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Nombre de CV fiscaux *</label>
-          <input
-            className={`form-input${
-              getError("nombreCVFiscaux") ? " error" : ""
-            }`}
-            type="number"
-            min={0}
-            step="0.5"
-            value={formData.nombreCVFiscaux}
-            onChange={(e) => {
-              onUpdate({ nombreCVFiscaux: e.target.value });
-              onVehicleDataUpdate({ puisFisc: e.target.value });
-            }}
-          />
-          {getError("nombreCVFiscaux") && (
-            <span className="error-message">{getError("nombreCVFiscaux")}</span>
-          )}
         </div>
 
         <div className="step-navigation">
