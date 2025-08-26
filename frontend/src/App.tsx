@@ -17,8 +17,8 @@ import { FormData, FormStep, VehicleData } from "./types";
 const STEPS_ORDER = [
   FormStep.VEHICLE_SEARCH,
   FormStep.API_RESULT,
-  FormStep.INSURANCE_INFO,
   FormStep.VEHICLE_INFO,
+  FormStep.INSURANCE_INFO,
   FormStep.ADDITIONAL_INFO,
   FormStep.PERSONAL_INFO_FIRST_PART,
   FormStep.PERSONAL_INFO_SECOND_PART,
@@ -56,6 +56,7 @@ const App: React.FC = () => {
     nombrePortes: "",
     nombrePlaces: "",
     couleur: "",
+    nombreCVFiscaux: "",
     modeFinancement: "",
     lieuStationnement: "",
     choixGaranties: "Tous Risques",
@@ -66,6 +67,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [wrongVehiculeFound, setWrongVehiculeFound] = useState(false);
 
   // Vérifier la santé du serveur au démarrage
   useEffect(() => {
@@ -157,6 +159,7 @@ const App: React.FC = () => {
           nombrePortes: result.data.nb_portes || "",
           nombrePlaces: result.data.nr_passagers || "",
           couleur: result.data.couleur || "",
+          nombreCVFiscaux: result.data.puisFisc || "",
         });
         navigateToStep(FormStep.API_RESULT);
       } else {
@@ -201,6 +204,7 @@ const App: React.FC = () => {
         nombrePortes: modifiedData.nb_portes || "",
         nombrePlaces: modifiedData.nr_passagers || "",
         couleur: modifiedData.couleur || "",
+        nombreCVFiscaux: modifiedData.puisFisc || "",
       });
     }
     navigateToNextStep();
@@ -211,9 +215,19 @@ const App: React.FC = () => {
     setError(null);
 
     try {
+      const vehicleDataToSend = wrongVehiculeFound
+        ? ({
+            marque: formData.marqueVehicule,
+            modele: formData.typeVersion,
+            date1erCir_us: formData.dateMiseCirculation,
+            immat: formData.immatriculation,
+            puisFisc: formData.nombreCVFiscaux,
+          } as VehicleData)
+        : vehicleData || undefined;
+
       const result = await apiService.sendEmailRecap(
         formData,
-        vehicleData || undefined
+        vehicleDataToSend
       );
 
       if (result.success) {
@@ -229,6 +243,26 @@ const App: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleWrongVehiculeFound = () => {
+    updateFormData({
+      marqueVehicule: "",
+      typeVersion: "",
+      dateMiseCirculation: "",
+      immatriculation: "",
+      energie: "",
+      puissanceFiscale: "",
+      puissanceReelle: "",
+      boiteVitesse: "",
+      carrosserie: "",
+      nombrePortes: "",
+      nombrePlaces: "",
+      couleur: "",
+      nombreCVFiscaux: "",
+    });
+    setWrongVehiculeFound(true);
+    navigateToNextStep();
   };
 
   const renderCurrentStep = () => {
@@ -248,6 +282,7 @@ const App: React.FC = () => {
             vehicleData={vehicleData}
             onBack={navigateToPreviousStep}
             onContinue={handleApiResultContinue}
+            onWrongVehiculeFound={handleWrongVehiculeFound}
           />
         );
 

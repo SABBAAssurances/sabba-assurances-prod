@@ -47,6 +47,10 @@ const SummaryStep: React.FC<SummaryStepProps> = ({
             <span className="info-label">Valeur :</span>
             <span className="info-value">{formData.valeurVehicule} €</span>
           </div>
+          <div className="info-row">
+            <span className="info-label">Nombre de CV fiscaux :</span>
+            <span className="info-value">{formData.nombreCVFiscaux}</span>
+          </div>
         </div>
         <div className="info-card">
           <h4>Assuré</h4>

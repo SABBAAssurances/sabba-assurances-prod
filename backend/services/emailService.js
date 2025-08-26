@@ -167,7 +167,7 @@ class EmailService {
       <body>
         <div class="container">
           <div class="header">
-            <h1>🚗 Nouvelle demande de devis auto prestige</h1>
+            <h1>Nouvelle demande de devis auto prestige</h1>
             <p>Date de demande: ${new Date().toLocaleString("fr-FR")}</p>
           </div>
           <div class="section vehicle-info">

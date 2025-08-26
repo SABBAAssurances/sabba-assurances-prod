@@ -101,6 +101,7 @@ export interface FormData {
   nombrePortes: string;
   nombrePlaces: string;
   couleur: string;
+  nombreCVFiscaux: string;
   
   // Informations complémentaires
   modeFinancement: string;
