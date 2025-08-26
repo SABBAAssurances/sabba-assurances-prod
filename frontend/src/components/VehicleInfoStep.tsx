@@ -55,10 +55,10 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
     <div>
       {!vehicleData && (
         <div className="info-card" style={{ marginBottom: "24px" }}>
-          <h4 style={{ marginBottom: "8px", color: "#151e29" }}>
+          <h4 style={{ marginBottom: "8px", color: "#203051" }}>
             Saisie manuelle des informations
           </h4>
-          <p style={{ color: "#151e29", fontSize: "0.95rem", margin: 0 }}>
+          <p style={{ color: "#203051", fontSize: "0.95rem", margin: 0 }}>
             Veuillez saisir les informations de votre véhicule manuellement.
           </p>
         </div>

@@ -34,9 +34,9 @@ const ButtonGroup: React.FC<ButtonGroupProps> = ({
         type="button"
         className="btn btn-secondary"
         style={{
-          background: "#fff3cd",
-          color: "#856404",
-          border: "1.5px solid #ffeaa7",
+          background: "#f5f6fa",
+          color: "#203051",
+          border: "1.5px solid #d1d5db",
         }}
         onClick={onWrongVehiculeFound}
       >

@@ -8,7 +8,7 @@
 
 body {
   background: #F2F8F9;
-  color: #151e29;
+  color: #203051;
   line-height: 1.6;
   min-height: 100vh;
 }
@@ -33,14 +33,14 @@ body {
 }
 
 .header h1 {
-  color: #151e29;
+  color: #203051;
   font-size: 2rem;
   font-weight: 700;
   letter-spacing: -1px;
 }
 
 .header p {
-  color: #151e29;
+  color: #203051;
   font-size: 1.1rem;
   margin-top: 8px;
 }
@@ -69,7 +69,7 @@ body {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: #151e29;
+  color: #203051;
   font-size: 1rem;
 }
 
@@ -78,10 +78,10 @@ body {
 .form-textarea {
   width: 100%;
   padding: 13px 14px;
-  border: 1.5px solid #151e29;
+  border: 1.5px solid #203051;
   border-radius: 10px;
   
-  color: #151e29;
+  color: #203051;
   font-size: 1rem;
   transition: border-color 0.2s;
 }
@@ -90,7 +90,7 @@ body {
 .form-select:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: #151e29;
+  border-color: #203051;
 }
 
 .form-input.error,
@@ -129,7 +129,7 @@ body {
   text-align: center;
   margin-top: 8px;
   margin-bottom: 0;
-  background: #151e29;
+  background: #203051;
   color: #f5f6fa;
   box-shadow: none;
 }
@@ -137,7 +137,7 @@ body {
 .btn:disabled,
 .btn[aria-disabled='true'] {
   background: #f5f6fa;
-  color: #151e29;
+  color: #203051;
   opacity: 0.5;
   cursor: not-allowed;
   box-shadow: none;
@@ -145,7 +145,7 @@ body {
 
 .btn-secondary {
   background: #FFFFFF;
-  color: #151e29;
+  color: #203051;
   margin-right: 8px;
   border: 1.5px solid rgba(21, 30, 41, 0.50);
 }
@@ -156,7 +156,7 @@ body {
 }
 
 .btn-success {
-  background: #151e29;
+  background: #203051;
   color: #f5f6fa;
 }
 
@@ -196,24 +196,24 @@ body {
   height: 28px;
   border-radius: 50%;
   background: #f5f6fa;
-  color: #151e29;
+  color: #203051;
   line-height: 28px;
   margin: 0 4px;
   font-weight: 700;
   font-size: 1rem;
   transition: background 0.2s, color 0.2s;
-  border: 1.5px solid #151e29;
+  border: 1.5px solid #203051;
 }
 
 .step-indicator .step.active {
-  background: #151e29;
+  background: #203051;
   color: #f5f6fa;
 }
 
 .step-indicator .step.completed {
   background: #f5f6fa;
-  color: #151e29;
-  border: 2px solid #151e29;
+  color: #203051;
+  border: 2px solid #203051;
 }
 
 .info-card {
@@ -224,7 +224,7 @@ body {
 }
 
 .info-card h3, .info-card h4 {
-  color: #151e29;
+  color: #203051;
   margin-bottom: 12px;
   font-size: 1.1rem;
   font-weight: 600;
@@ -279,11 +279,11 @@ body {
 
 .info-label {
   font-weight: 500;
-  color: #151e29;
+  color: #203051;
 }
 
 .info-value {
-  color: #151e29;
+  color: #203051;
   text-align: right;
 }
 
@@ -297,8 +297,8 @@ body {
 
 .message.success {
   background: #f5f6fa;
-  color: #151e29;
-  border: 1.5px solid #151e29;
+  color: #203051;
+  border: 1.5px solid #203051;
 }
 
 .message.error {
@@ -309,8 +309,8 @@ body {
 
 .message.info {
   background: #f5f6fa;
-  color: #151e29;
-  border: 1.5px solid #151e29;
+  color: #203051;
+  border: 1.5px solid #203051;
 }
 
 .loading {
@@ -322,7 +322,7 @@ body {
 
 .spinner {
   border: 4px solid #f5f6fa;
-  border-top: 4px solid #151e29;
+  border-top: 4px solid #203051;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -378,12 +378,12 @@ body {
   display: flex;
   align-items: center;
   padding: 10px;
-  border: 1.5px solid #151e29;
+  border: 1.5px solid #203051;
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.2s;
   background: #f5f6fa;
-  color: #151e29;
+  color: #203051;
 }
 
 .checkbox-item:hover,
@@ -393,9 +393,9 @@ body {
 
 .checkbox-item.selected,
 .radio-item.selected {
-  background: #151e29;
+  background: #203051;
   color: #f5f6fa;
-  border-color: #151e29;
+  border-color: #203051;
 }
 
 .form-input[type="date"],
@@ -425,7 +425,7 @@ body {
   
   padding: 40px;
   border-radius: 16px;
-  border: 2px solid #151e29;
+  border: 2px solid #203051;
   box-shadow: 0 8px 32px rgba(76, 175, 80, 0.1);
 }
 
@@ -434,7 +434,7 @@ body {
 }
 
 .success-title {
-  color: #151e29;
+  color: #203051;
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 16px;
@@ -442,7 +442,7 @@ body {
 }
 
 .success-message {
-  color: #151e29;
+  color: #203051;
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 24px;
@@ -452,11 +452,11 @@ body {
   background: #f5f6fa;
   padding: 20px;
   border-radius: 12px;
-  border: 1px solid #151e29;
+  border: 1px solid #203051;
 }
 
 .success-details p {
-  color: #151e29;
+  color: #203051;
   font-size: 0.95rem;
   margin-bottom: 8px;
 }

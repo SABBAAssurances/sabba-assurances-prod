@@ -12,7 +12,7 @@ const SuccessStep: React.FC = () => {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <circle cx="12" cy="12" r="10" fill="#151e29" />
+            <circle cx="12" cy="12" r="10" fill="#203051" />
             <path
               d="M9 12l2 2 4-4"
               stroke="white"

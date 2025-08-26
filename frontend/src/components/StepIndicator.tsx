@@ -14,7 +14,7 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => {
     <div className="step-indicator">
       <ProgressBar
         completed={percent}
-        bgColor="#151e29"
+        bgColor="#203051"
         baseBgColor="#fff"
         height="10px"
         isLabelVisible={false}
@@ -24,7 +24,7 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => {
       {/* <div
         style={{
           marginTop: 10,
-          color: "#151e29",
+          color: "#203051",
           fontWeight: 600,
           fontSize: "1rem",
         }}
