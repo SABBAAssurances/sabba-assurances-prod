@@ -7,7 +7,7 @@
 }
 
 body {
-  background: #fff;
+  background: #f9f4f2;
   color: #151e29;
   line-height: 1.6;
   min-height: 100vh;
@@ -17,7 +17,7 @@ body {
 .app-container {
   width: 100%;
   min-height: 100vh;
-  background: #fff;
+  background: #f9f4f2;
   padding: 0;
   margin: 0;
   border-radius: 0;
@@ -28,7 +28,7 @@ body {
 .header {
   text-align: center;
   margin-bottom: 32px;
-  background: #fff;
+  
   padding: 24px 0 0 0;
 }
 
@@ -46,7 +46,7 @@ body {
 }
 
 .form-container {
-  background: #fff;
+  
   padding: 0;
   border-radius: 0;
   box-shadow: none;
@@ -80,7 +80,7 @@ body {
   padding: 13px 14px;
   border: 1.5px solid #151e29;
   border-radius: 10px;
-  background: #fff;
+  
   color: #151e29;
   font-size: 1rem;
   transition: border-color 0.2s;
@@ -416,7 +416,7 @@ body {
 .success-content {
   text-align: center;
   max-width: 500px;
-  background: #fff;
+  
   padding: 40px;
   border-radius: 16px;
   border: 2px solid #4CAF50;
