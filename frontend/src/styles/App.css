@@ -7,7 +7,7 @@
 }
 
 body {
-  background: #f9f4f2;
+  background: #F2F8F9;
   color: #151e29;
   line-height: 1.6;
   min-height: 100vh;
@@ -17,7 +17,7 @@ body {
 .app-container {
   width: 100%;
   min-height: 100vh;
-  background: #f9f4f2;
+  background: #F2F8F9;
   padding: 0;
   margin: 0;
   border-radius: 0;
