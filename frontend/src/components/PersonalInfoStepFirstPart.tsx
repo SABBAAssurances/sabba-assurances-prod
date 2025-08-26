@@ -17,21 +17,30 @@ const PersonalInfoStepFirstPart: React.FC<PersonalInfoStepFirstPartProps> = ({
   const [errors, setErrors] = useState<ValidationError[]>([]);
 
   const isValid =
-    formData.nomComplet.trim() &&
+    formData.prenom.trim() &&
+    formData.nomFamille.trim() &&
+    formData.ville.trim() &&
     formData.adresse.trim() &&
     formData.codePostal.trim() &&
-    formData.dateNaissance;
+    formData.dateNaissance &&
+    formData.moisAnneePermis;
 
   const validate = (): boolean => {
     const newErrors: ValidationError[] = [];
-    if (!formData.nomComplet.trim())
-      newErrors.push({ field: "nomComplet", message: "Champ requis" });
+    if (!formData.prenom.trim())
+      newErrors.push({ field: "prenom", message: "Champ requis" });
+    if (!formData.nomFamille.trim())
+      newErrors.push({ field: "nomFamille", message: "Champ requis" });
+    if (!formData.ville.trim())
+      newErrors.push({ field: "ville", message: "Champ requis" });
     if (!formData.adresse.trim())
       newErrors.push({ field: "adresse", message: "Champ requis" });
     if (!formData.codePostal.trim())
       newErrors.push({ field: "codePostal", message: "Champ requis" });
     if (!formData.dateNaissance)
       newErrors.push({ field: "dateNaissance", message: "Champ requis" });
+    if (!formData.moisAnneePermis)
+      newErrors.push({ field: "moisAnneePermis", message: "Champ requis" });
     setErrors(newErrors);
     return newErrors.length === 0;
   };
@@ -47,19 +56,32 @@ const PersonalInfoStepFirstPart: React.FC<PersonalInfoStepFirstPartProps> = ({
   return (
     <form className="form-container" onSubmit={handleNext} autoComplete="off">
       <div className="form-group">
-        <label className="form-label">Prénom NOM *</label>
+        <label className="form-label">Prénom *</label>
         <input
-          className={`form-input${getError("nomComplet") ? " error" : ""}`}
+          className={`form-input${getError("prenom") ? " error" : ""}`}
           type="text"
-          value={formData.nomComplet}
-          onChange={(e) => onUpdate({ nomComplet: e.target.value })}
+          value={formData.prenom}
+          onChange={(e) => onUpdate({ prenom: e.target.value })}
         />
-        {getError("nomComplet") && (
-          <span className="error-message">{getError("nomComplet")}</span>
+        {getError("prenom") && (
+          <span className="error-message">{getError("prenom")}</span>
         )}
       </div>
+
       <div className="form-group">
-        <label className="form-label">Adresse / Ville *</label>
+        <label className="form-label">Nom de famille *</label>
+        <input
+          className={`form-input${getError("nomFamille") ? " error" : ""}`}
+          type="text"
+          value={formData.nomFamille}
+          onChange={(e) => onUpdate({ nomFamille: e.target.value })}
+        />
+        {getError("nomFamille") && (
+          <span className="error-message">{getError("nomFamille")}</span>
+        )}
+      </div>
+      <div className="form-group full-width">
+        <label className="form-label">Adresse *</label>
         <input
           className={`form-input${getError("adresse") ? " error" : ""}`}
           type="text"
@@ -70,6 +92,19 @@ const PersonalInfoStepFirstPart: React.FC<PersonalInfoStepFirstPartProps> = ({
           <span className="error-message">{getError("adresse")}</span>
         )}
       </div>
+
+      <div className="form-group">
+        <label className="form-label">Ville *</label>
+        <input
+          className={`form-input${getError("ville") ? " error" : ""}`}
+          type="text"
+          value={formData.ville}
+          onChange={(e) => onUpdate({ ville: e.target.value })}
+        />
+        {getError("ville") && (
+          <span className="error-message">{getError("ville")}</span>
+        )}
+      </div>
       <div className="form-group">
         <label className="form-label">Code postal *</label>
         <input
@@ -77,7 +112,6 @@ const PersonalInfoStepFirstPart: React.FC<PersonalInfoStepFirstPartProps> = ({
           type="text"
           value={formData.codePostal}
           onChange={(e) => onUpdate({ codePostal: e.target.value })}
-          placeholder="75001"
         />
         {getError("codePostal") && (
           <span className="error-message">{getError("codePostal")}</span>
@@ -95,6 +129,20 @@ const PersonalInfoStepFirstPart: React.FC<PersonalInfoStepFirstPartProps> = ({
           <span className="error-message">{getError("dateNaissance")}</span>
         )}
       </div>
+
+      <div className="form-group">
+        <label className="form-label">Mois/année permis de conduire *</label>
+        <input
+          className={`form-input${getError("moisAnneePermis") ? " error" : ""}`}
+          type="month"
+          value={formData.moisAnneePermis}
+          onChange={(e) => onUpdate({ moisAnneePermis: e.target.value })}
+        />
+        {getError("moisAnneePermis") && (
+          <span className="error-message">{getError("moisAnneePermis")}</span>
+        )}
+      </div>
+
       <div className="step-navigation">
         <button type="button" className="btn btn-secondary" onClick={onPrev}>
           Retour

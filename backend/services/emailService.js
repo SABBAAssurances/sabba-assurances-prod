@@ -354,14 +354,22 @@ class EmailService {
           <div class="section">
             <h3>👤 Informations personnelles</h3>
             <div class="field">
-              <span class="label">Nom complet:</span>
+              <span class="label">Prénom:</span>
+              <span class="value">${formData.prenom || "Non renseigné"}</span>
+            </div>
+            <div class="field">
+              <span class="label">Nom de famille:</span>
               <span class="value">${
-                formData.nomComplet || "Non renseigné"
+                formData.nomFamille || "Non renseigné"
               }</span>
             </div>
             <div class="field">
               <span class="label">Adresse:</span>
               <span class="value">${formData.adresse || "Non renseigné"}</span>
+            </div>
+            <div class="field">
+              <span class="label">Ville:</span>
+              <span class="value">${formData.ville || "Non renseigné"}</span>
             </div>
             <div class="field">
               <span class="label">Code postal:</span>

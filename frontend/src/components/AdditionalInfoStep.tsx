@@ -20,20 +20,9 @@ const stationnementOptions = [
   },
 ];
 const garantiesOptions = [
+  { value: "Tous Risques", label: "Tous Risques" },
   { value: "Minimum", label: "Minimum" },
   { value: "Vol/Incendie/Bris de Glace", label: "Vol/Incendie/Bris de Glace" },
-  { value: "Tous Risques", label: "Tous Risques" },
-];
-const connaissanceOptions = [
-  { value: "Par mon club", label: "Par mon club" },
-  { value: "Un ami m'a recommandé", label: "Un ami m'a recommandé" },
-  { value: "Mon concessionnaire", label: "Mon concessionnaire" },
-  { value: "Sur un évènement", label: "Sur un évènement" },
-  { value: "Déjà client", label: "Déjà client" },
-  { value: "Pub Magazine", label: "Pub Magazine" },
-  { value: "Sur un forum", label: "Sur un forum" },
-  { value: "Pub internet", label: "Pub internet" },
-  { value: "Autre", label: "Autre" },
 ];
 
 interface AdditionalInfoStepProps {
@@ -137,21 +126,7 @@ const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
           <span className="error-message">{getError("choixGaranties")}</span>
         )}
       </div>
-      <div className="form-group">
-        <label className="form-label">Comment nous avez-vous connu ?</label>
-        <select
-          className="form-select"
-          value={formData.commentConnaissance}
-          onChange={(e) => onUpdate({ commentConnaissance: e.target.value })}
-        >
-          <option value="">Sélectionner (optionnel)</option>
-          {connaissanceOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      </div>
+
       <div className="form-group full-width">
         <label className="form-label">Demandes particulières</label>
         <textarea

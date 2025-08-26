@@ -31,7 +31,9 @@ const App: React.FC = () => {
     FormStep.VEHICLE_SEARCH
   );
   const [formData, setFormData] = useState<FormData>({
-    nomComplet: "",
+    prenom: "",
+    nomFamille: "",
+    ville: "",
     adresse: "",
     codePostal: "",
     dateNaissance: "",

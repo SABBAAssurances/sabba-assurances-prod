@@ -24,8 +24,7 @@ const SuccessStep: React.FC = () => {
         </div>
         <h2 className="success-title">Demande envoyée avec succès !</h2>
         <p className="success-message">
-          Nous vous remercions pour votre confiance et nous vous recontacterons
-          au plus vite.
+          Merci de nous avoir contacté, nous reviendrons vers vous sous peu
         </p>
       </div>
     </div>

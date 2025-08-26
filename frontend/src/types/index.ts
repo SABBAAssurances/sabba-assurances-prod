@@ -72,7 +72,9 @@ export interface VehicleData {
 // Types pour les données du formulaire
 export interface FormData {
   // Informations personnelles
-  nomComplet: string;
+  prenom: string;
+  nomFamille: string;
+  ville: string;
   adresse: string;
   codePostal: string;
   dateNaissance: string;

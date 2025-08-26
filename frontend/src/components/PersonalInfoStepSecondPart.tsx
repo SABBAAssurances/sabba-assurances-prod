@@ -1,6 +1,18 @@
 import React, { useState } from "react";
 import { FormData, ValidationError } from "../types";
 
+const connaissanceOptions = [
+  { value: "Par mon club", label: "Par mon club" },
+  { value: "Un ami m'a recommandé", label: "Un ami m'a recommandé" },
+  { value: "Mon concessionnaire", label: "Mon concessionnaire" },
+  { value: "Sur un évènement", label: "Sur un évènement" },
+  { value: "Déjà client", label: "Déjà client" },
+  { value: "Pub Magazine", label: "Pub Magazine" },
+  { value: "Sur un forum", label: "Sur un forum" },
+  { value: "Pub internet", label: "Pub internet" },
+  { value: "Autre", label: "Autre" },
+];
+
 interface PersonalInfoStepSecondPartProps {
   formData: FormData;
   onUpdate: (updates: Partial<FormData>) => void;
@@ -17,15 +29,12 @@ const PersonalInfoStepSecondPart: React.FC<PersonalInfoStepSecondPartProps> = ({
   const [errors, setErrors] = useState<ValidationError[]>([]);
 
   const isValid =
-    formData.moisAnneePermis &&
     formData.profession.trim() &&
     formData.email.trim() &&
     formData.telephone.trim();
 
   const validate = (): boolean => {
     const newErrors: ValidationError[] = [];
-    if (!formData.moisAnneePermis)
-      newErrors.push({ field: "moisAnneePermis", message: "Champ requis" });
     if (!formData.profession.trim())
       newErrors.push({ field: "profession", message: "Champ requis" });
     if (!formData.email.trim())
@@ -46,18 +55,6 @@ const PersonalInfoStepSecondPart: React.FC<PersonalInfoStepSecondPartProps> = ({
 
   return (
     <form className="form-container" onSubmit={handleNext} autoComplete="off">
-      <div className="form-group">
-        <label className="form-label">Mois/année permis de conduire *</label>
-        <input
-          className={`form-input${getError("moisAnneePermis") ? " error" : ""}`}
-          type="month"
-          value={formData.moisAnneePermis}
-          onChange={(e) => onUpdate({ moisAnneePermis: e.target.value })}
-        />
-        {getError("moisAnneePermis") && (
-          <span className="error-message">{getError("moisAnneePermis")}</span>
-        )}
-      </div>
       <div className="form-group">
         <label className="form-label">Profession & secteur d'activité *</label>
         <input
@@ -94,6 +91,23 @@ const PersonalInfoStepSecondPart: React.FC<PersonalInfoStepSecondPartProps> = ({
           <span className="error-message">{getError("telephone")}</span>
         )}
       </div>
+
+      <div className="form-group">
+        <label className="form-label">Comment nous avez-vous connu ?</label>
+        <select
+          className="form-select"
+          value={formData.commentConnaissance}
+          onChange={(e) => onUpdate({ commentConnaissance: e.target.value })}
+        >
+          <option value="">Sélectionner (optionnel)</option>
+          {connaissanceOptions.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="step-navigation">
         <button type="button" className="btn btn-secondary" onClick={onPrev}>
           Retour
