@@ -6,7 +6,7 @@ const bonusOptions = Array.from({ length: 151 }, (_, i) =>
 );
 const utilisationOptions = [
   { value: "Moins de 7000km", label: "Moins de 7000km / an" },
-  { value: "7000 à 9000km/an", label: "7000 à 9000km/an / an" },
+  { value: "7000 à 9000km/an", label: "7000 à 9000km / an" },
   { value: "Loisirs illimité", label: "Loisirs illimité" },
   {
     value: "Déplacement privé & travail illimité",
