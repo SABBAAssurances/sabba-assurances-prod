@@ -11,7 +11,7 @@ class EmailService {
       email: process.env.EMAIL_RECIPIENT,
       name: "Rayan Kheloufi",
     };
-    this.isDev = process.env.NODE_ENV === "development";
+    this.isDev = process.env.NODE_ENV !== "production";
   }
 
   async sendEmailRecap(formData, vehicleData) {

@@ -4,7 +4,7 @@ class ImmatriculationService {
   constructor() {
     this.apiKey = process.env.API_KEY_IMMATRICULATION;
     this.baseUrl = "https://api.apiplaqueimmatriculation.com";
-    this.isDev = process.env.NODE_ENV === "development";
+    this.isDev = process.env.NODE_ENV !== "production";
   }
 
   async getVehicleInfo(plaque) {
