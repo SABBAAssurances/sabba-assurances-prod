@@ -70,6 +70,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [wrongVehiculeFound, setWrongVehiculeFound] = useState(false);
+  const [launchAutomaticSearch, setLaunchAutomaticSearch] = useState(true);
 
   // Vérifier la santé du serveur au démarrage
   useEffect(() => {
@@ -97,6 +98,11 @@ const App: React.FC = () => {
     setCurrentStep(step);
     setError(null);
     setSuccess(null);
+
+    // Si on navigue vers une étape autre que VEHICLE_SEARCH, ce n'est plus la première visite
+    if (step !== FormStep.VEHICLE_SEARCH) {
+      setLaunchAutomaticSearch(false);
+    }
   };
 
   const navigateToNextStep = () => {
@@ -275,6 +281,7 @@ const App: React.FC = () => {
             onSearch={handleVehicleSearch}
             loading={loading}
             error={error}
+            launchAutomaticSearch={launchAutomaticSearch}
           />
         );
 

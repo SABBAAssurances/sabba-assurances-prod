@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface VehicleSearchProps {
   onSearch: (plaque: string) => void;
   loading: boolean;
   error: string | null;
+  launchAutomaticSearch: boolean;
 }
 
 const plaqueRegex = /^[A-Z]{2}-?\d{3}-?[A-Z]{2}$/i;
@@ -12,10 +13,29 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
   onSearch,
   loading,
   error,
+  launchAutomaticSearch: isFirstVisit,
 }) => {
   const [plaque, setPlaque] = useState("");
 
   const isPlaqueValid = plaqueRegex.test(plaque.trim().toUpperCase());
+
+  // Détecter automatiquement le paramètre immat dans l'URL seulement si c'est la première visite
+  useEffect(() => {
+    if (!isFirstVisit) return; // Ne pas faire la recherche automatique si ce n'est pas la première visite
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const immatParam = urlParams.get("immat");
+
+    if (immatParam && plaqueRegex.test(immatParam.trim().toUpperCase())) {
+      const formattedImmat = formatPlaque(immatParam);
+      setPlaque(formattedImmat);
+
+      // Déclencher automatiquement la recherche après un court délai
+      setTimeout(() => {
+        onSearch(formattedImmat.trim());
+      }, 100);
+    }
+  }, [onSearch, isFirstVisit]);
 
   const formatPlaque = (value: string): string => {
     // Supprimer tous les caractères non alphanumériques sauf les tirets
