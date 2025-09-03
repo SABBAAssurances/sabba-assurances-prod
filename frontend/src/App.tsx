@@ -115,7 +115,6 @@ const App: React.FC = () => {
   const navigateToPreviousStep = () => {
     const currentIndex = getCurrentStepIndex();
 
-    // Gestion des cas spéciaux
     if (currentStep === FormStep.INSURANCE_INFO) {
       if (!vehicleData) {
         navigateToStep(FormStep.VEHICLE_SEARCH);
