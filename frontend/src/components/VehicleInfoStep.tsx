@@ -105,13 +105,16 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
             className={`form-input${
               getError("nombreCVFiscaux") ? " error" : ""
             }`}
-            type="number"
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             min={0}
-            step="0.5"
             value={formData.nombreCVFiscaux}
             onChange={(e) => {
-              onUpdate({ nombreCVFiscaux: e.target.value });
-              onVehicleDataUpdate({ puisFisc: e.target.value });
+              // On ne garde que les chiffres
+              const onlyNumbers = e.target.value.replace(/[^0-9]/g, "");
+              onUpdate({ nombreCVFiscaux: onlyNumbers });
+              onVehicleDataUpdate({ puisFisc: onlyNumbers });
             }}
           />
           {getError("nombreCVFiscaux") && (
