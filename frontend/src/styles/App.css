@@ -22,7 +22,7 @@ body {
   margin: 0;
   border-radius: 0;
   box-shadow: none;
-  padding: 50px;
+  padding: 50px 50px 50px 50px;
 }
 
 .header {
@@ -339,6 +339,7 @@ body {
     min-height: 100vh;
     border-radius: 0;
     box-shadow: none;
+    padding: 50px 0px 50px 0px;
   }
   .header h1 {
     font-size: 1.3rem;
