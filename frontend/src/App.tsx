@@ -112,10 +112,17 @@ const App: React.FC = () => {
     }
   };
 
+  const skipApiSearch = () => {
+    navigateToStep(FormStep.VEHICLE_INFO);
+  };
+
   const navigateToPreviousStep = () => {
     const currentIndex = getCurrentStepIndex();
 
-    if (currentStep === FormStep.INSURANCE_INFO) {
+    if (
+      currentStep === FormStep.INSURANCE_INFO ||
+      currentStep === FormStep.VEHICLE_INFO
+    ) {
       if (!vehicleData) {
         navigateToStep(FormStep.VEHICLE_SEARCH);
       } else {
@@ -123,6 +130,7 @@ const App: React.FC = () => {
       }
       return;
     }
+
     // Navigation standard
     if (currentIndex > 0) {
       navigateToStep(STEPS_ORDER[currentIndex - 1]);
@@ -281,6 +289,7 @@ const App: React.FC = () => {
             loading={loading}
             error={error}
             launchAutomaticSearch={launchAutomaticSearch}
+            onContinueWithoutSearch={skipApiSearch}
           />
         );
 

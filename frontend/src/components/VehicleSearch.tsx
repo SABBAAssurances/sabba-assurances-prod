@@ -5,6 +5,7 @@ interface VehicleSearchProps {
   loading: boolean;
   error: string | null;
   launchAutomaticSearch: boolean;
+  onContinueWithoutSearch: () => void;
 }
 
 const plaqueRegex = /^[A-Z]{2}-?\d{3}-?[A-Z]{2}$/i;
@@ -14,6 +15,7 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
   loading,
   error,
   launchAutomaticSearch: isFirstVisit,
+  onContinueWithoutSearch,
 }) => {
   const [plaque, setPlaque] = useState("");
 
@@ -88,11 +90,22 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
           required
         />
       </div>
-      <div className="step-navigation">
+      <div
+        className="step-navigation"
+        style={{
+          display: "flex",
+          gap: "12px",
+          flexWrap: "wrap",
+        }}
+      >
         <button
           className="btn btn-primary"
           type="submit"
           disabled={loading || !isPlaqueValid}
+          style={{
+            flex: "3 1 200px",
+            minWidth: 0,
+          }}
         >
           {loading ? (
             <span
@@ -107,6 +120,16 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
           ) : (
             "Rechercher le véhicule"
           )}
+        </button>
+        <button
+          className="btn btn-secondary"
+          onClick={onContinueWithoutSearch}
+          style={{
+            flex: "1 1 180px",
+            minWidth: 0,
+          }}
+        >
+          Continuer sans recherche
         </button>
       </div>
 
