@@ -74,6 +74,8 @@ const PersonalInfoStepSecondPart: React.FC<PersonalInfoStepSecondPartProps> = ({
           type="email"
           value={formData.email}
           onChange={(e) => onUpdate({ email: e.target.value })}
+          autoComplete="email"
+          inputMode="email"
         />
         {getError("email") && (
           <span className="error-message">{getError("email")}</span>
@@ -86,6 +88,8 @@ const PersonalInfoStepSecondPart: React.FC<PersonalInfoStepSecondPartProps> = ({
           type="tel"
           value={formData.telephone}
           onChange={(e) => onUpdate({ telephone: e.target.value })}
+          autoComplete="tel"
+          inputMode="tel"
         />
         {getError("telephone") && (
           <span className="error-message">{getError("telephone")}</span>

@@ -23,7 +23,6 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
   const isValid =
     formData.marqueVehicule.trim() &&
     formData.typeVersion.trim() &&
-    formData.valeurVehicule !== undefined &&
     formData.dateMiseCirculation &&
     formData.nombreCVFiscaux;
 
@@ -33,8 +32,6 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
       newErrors.push({ field: "marqueVehicule", message: "Champ requis" });
     if (!formData.typeVersion.trim())
       newErrors.push({ field: "typeVersion", message: "Champ requis" });
-    if (!formData.valeurVehicule)
-      newErrors.push({ field: "valeurVehicule", message: "Champ requis" });
     if (!formData.dateMiseCirculation)
       newErrors.push({ field: "dateMiseCirculation", message: "Champ requis" });
     if (!formData.nombreCVFiscaux)
@@ -123,7 +120,7 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
         </div>
 
         <div className="form-group">
-          <label className="form-label">Valeur d'achat ou estimée (€) *</label>
+          <label className="form-label">Valeur d'achat ou estimée (€)</label>
           <input
             className={`form-input${
               getError("valeurVehicule") ? " error" : ""
