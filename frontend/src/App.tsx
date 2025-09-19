@@ -71,6 +71,7 @@ const App: React.FC = () => {
   const [success, setSuccess] = useState<string | null>(null);
   const [wrongVehiculeFound, setWrongVehiculeFound] = useState(false);
   const [launchAutomaticSearch, setLaunchAutomaticSearch] = useState(true);
+  const [isResearchSkipped, setIsResearchSkipped] = useState(false);
 
   // Vérifier la santé du serveur au démarrage
   useEffect(() => {
@@ -113,6 +114,7 @@ const App: React.FC = () => {
   };
 
   const skipApiSearch = () => {
+    setIsResearchSkipped(true);
     navigateToStep(FormStep.VEHICLE_INFO);
   };
 
@@ -151,6 +153,7 @@ const App: React.FC = () => {
   const handleVehicleSearch = async (plaque: string) => {
     setLoading(true);
     setError(null);
+    setIsResearchSkipped(false);
 
     try {
       const result = await apiService.getVehicleInfo(plaque);
@@ -184,7 +187,10 @@ const App: React.FC = () => {
           );
         }
         setVehicleData(null);
-        navigateToStep(FormStep.API_RESULT);
+        updateFormData({
+          immatriculation: plaque,
+        });
+        navigateToStep(FormStep.VEHICLE_INFO);
       }
     } catch (error) {
       // En cas d'erreur, on affiche aussi le résultat
@@ -192,7 +198,10 @@ const App: React.FC = () => {
       setError(
         "Une erreur est survenue lors de la récupération des informations."
       );
-      navigateToStep(FormStep.API_RESULT);
+      updateFormData({
+        immatriculation: plaque,
+      });
+      navigateToStep(FormStep.VEHICLE_INFO);
     } finally {
       setLoading(false);
     }
@@ -338,6 +347,7 @@ const App: React.FC = () => {
           <VehicleInfoStep
             formData={formData}
             vehicleData={vehicleData}
+            isResearchSkipped={isResearchSkipped}
             onUpdate={updateFormData}
             onVehicleDataUpdate={updateVehicleData}
             onNext={navigateToNextStep}

@@ -4,6 +4,7 @@ import { FormData, ValidationError, VehicleData } from "../types";
 interface VehicleInfoStepProps {
   formData: FormData;
   vehicleData?: VehicleData | null;
+  isResearchSkipped: boolean;
   onUpdate: (updates: Partial<FormData>) => void;
   onVehicleDataUpdate: (updates: Partial<VehicleData>) => void;
   onNext: () => void;
@@ -13,6 +14,7 @@ interface VehicleInfoStepProps {
 const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
   formData,
   vehicleData,
+  isResearchSkipped,
   onUpdate,
   onVehicleDataUpdate,
   onNext,
@@ -52,6 +54,11 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
     <div>
       {!vehicleData && (
         <div className="info-card" style={{ marginBottom: "24px" }}>
+          {!isResearchSkipped && (
+            <h2 style={{ color: "#203051", marginBottom: "8px" }}>
+              Plaque d'immatriculation non reconnue.
+            </h2>
+          )}
           <h4 style={{ marginBottom: "8px", color: "#203051" }}>
             Saisie manuelle des informations
           </h4>
