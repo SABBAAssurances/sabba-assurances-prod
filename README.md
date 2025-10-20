@@ -25,7 +25,7 @@ API_KEY_IMMATRICULATION=KEY
 BREVO_API_KEY=KEY
 NODE_ENV=development
 EMAIL_SENDER=sender@mail.fr
-EMAIL_RECIPIENT=recipient@mail.fr
+EMAILS_RECIPIENT=recipient1@mail.fr,recipient2@mail.fr
 ```
 
 ### Lancement

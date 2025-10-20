@@ -7,21 +7,86 @@ class EmailService {
       name: "Sabba Assurances",
       email: process.env.EMAIL_SENDER,
     };
-    this.recipient = {
-      email: process.env.EMAIL_RECIPIENT,
-      name: "Rayan Kheloufi",
-    };
+    this.recipients = this._parseRecipients(process.env.EMAILS_RECIPIENT);
     this.isDev = process.env.NODE_ENV !== "production";
+  }
+
+  /**
+   * Parse la liste des emails destinataires depuis la variable d'environnement
+   * @param {string} emailsString - Liste d'emails séparés par des virgules
+   * @returns {Array} - Tableau d'objets recipients au format Brevo
+   */
+  _parseRecipients(emailsString) {
+    if (!emailsString || emailsString.trim() === "") {
+      console.warn(
+        "⚠️  EMAILS_RECIPIENT non défini. Aucun email ne sera envoyé."
+      );
+      return [];
+    }
+
+    // Séparer les emails par virgule, nettoyer les espaces et filtrer les vides
+    const emails = emailsString
+      .split(",")
+      .map((email) => email.trim())
+      .filter((email) => email.length > 0);
+
+    // Valider le format des emails et créer les objets recipients
+    const recipients = emails
+      .filter((email) => this._isValidEmail(email))
+      .map((email) => ({ email, name: "" }));
+
+    if (recipients.length === 0) {
+      console.warn(
+        "⚠️  Aucun email valide trouvé dans EMAILS_RECIPIENT. Aucun email ne sera envoyé."
+      );
+    } else {
+      console.log(
+        `✅ ${recipients.length} destinataire(s) configuré(s) : ${recipients
+          .map((r) => r.email)
+          .join(", ")}`
+      );
+    }
+
+    return recipients;
+  }
+
+  /**
+   * Valide le format d'une adresse email
+   * @param {string} email - Email à valider
+   * @returns {boolean} - True si l'email est valide
+   */
+  _isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValid = emailRegex.test(email);
+    if (!isValid) {
+      console.warn(`⚠️  Email invalide ignoré : ${email}`);
+    }
+    return isValid;
   }
 
   async sendEmailRecap(formData, vehicleData) {
     try {
+      // Vérifier qu'il y a au moins un destinataire
+      if (!this.recipients || this.recipients.length === 0) {
+        console.error(
+          "❌ Aucun destinataire configuré. Impossible d'envoyer l'email."
+        );
+        return {
+          success: false,
+          error:
+            "Aucun destinataire configuré. Veuillez définir EMAILS_RECIPIENT dans les variables d'environnement.",
+        };
+      }
+
       // Construction du contenu HTML
       const htmlContent = this.formatEmailContent(formData, vehicleData);
 
       // En mode développement, on log juste le mail
       if (this.isDev) {
         console.log("--- MAIL DEV MODE ---");
+        console.log(
+          `Destinataires: ${this.recipients.map((r) => r.email).join(", ")}`
+        );
         console.log(htmlContent);
         console.log("---------------------");
         return { success: true, messageId: "DEV-MODE" };
@@ -36,19 +101,22 @@ class EmailService {
       // Préparation de l'email
       const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
       sendSmtpEmail.sender = this.sender;
-      sendSmtpEmail.to = [this.recipient];
+      sendSmtpEmail.to = this.recipients;
       sendSmtpEmail.subject = "Nouvelle demande de devis auto prestige";
       sendSmtpEmail.htmlContent = htmlContent;
 
       // Envoi de l'email
       const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
+      console.log(
+        `✅ Email envoyé avec succès à ${this.recipients.length} destinataire(s)`
+      );
       return {
         success: true,
         messageId: data.messageId,
       };
     } catch (error) {
       console.error(
-        "Erreur lors de l'envoi de l'email via Brevo:",
+        "❌ Erreur lors de l'envoi de l'email via Brevo:",
         error.message
       );
       return {

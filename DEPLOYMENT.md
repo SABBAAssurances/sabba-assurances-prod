@@ -39,14 +39,14 @@ Suivez les instructions :
 3. Allez dans "Settings" → "Environment Variables"
 4. Ajoutez les variables suivantes :
 
-| Variable                  | Description             | Exemple                                        |
-| ------------------------- | ----------------------- | ---------------------------------------------- |
-| `FRONTEND_URL`            | URL du frontend         | `https://sabba-assurances-frontend.vercel.app` |
-| `API_KEY_IMMATRICULATION` | Clé API immatriculation | `TokenDemo2025A`                               |
-| `BREVO_API_KEY`           | Clé API Brevo           | `xkeysib-...`                                  |
-| `NODE_ENV`                | Mode environnement      | `production`                                   |
-| `EMAIL_SENDER`            | Email d'expédition      | `sender@mail.fr`                               |
-| `EMAIL_RECIPIENT`         | Email de réception      | `recipient@mail.fr`                            |
+| Variable                  | Description                            | Exemple                                                          |
+| ------------------------- | -------------------------------------- | ---------------------------------------------------------------- |
+| `FRONTEND_URL`            | URL du frontend                        | `https://sabba-assurances-frontend.vercel.app`                   |
+| `API_KEY_IMMATRICULATION` | Clé API immatriculation                | `TokenDemo2025A`                                                 |
+| `BREVO_API_KEY`           | Clé API Brevo                          | `xkeysib-...`                                                    |
+| `NODE_ENV`                | Mode environnement                     | `production`                                                     |
+| `EMAIL_SENDER`            | Email d'expédition                     | `sender@mail.fr`                                                 |
+| `EMAILS_RECIPIENT`        | Emails de réception (séparés par ,)   | `recipient1@mail.fr,recipient2@mail.fr,recipient3@mail.fr`       |
 
 **Note** : Ne pas utiliser la commande `vercel env add` pour éviter les conflits.
 

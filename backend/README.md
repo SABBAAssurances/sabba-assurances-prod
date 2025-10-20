@@ -21,7 +21,7 @@ API_KEY_IMMATRICULATION=TokenDemo2025A
 BREVO_API_KEY=your_brevo_api_key_here
 NODE_ENV=development
 EMAIL_SENDER=sender@mail.fr
-EMAIL_RECIPIENT=recipient@mail.fr
+EMAILS_RECIPIENT=recipient1@mail.fr,recipient2@mail.fr,recipient3@mail.fr
 ```
 
 ## Variables d'environnement
@@ -30,9 +30,14 @@ EMAIL_RECIPIENT=recipient@mail.fr
 - `FRONTEND_URL` : URL du frontend pour CORS
 - `API_KEY_IMMATRICULATION` : Clé API pour l'API d'immatriculation
 - `BREVO_API_KEY` : Clé API Brevo pour l'envoi d'emails
-- `NODE_ENV` : Mode développement (true/false)
-  - Si `NODE_ENV=development` : L'API d'immatriculation utilise des données mockées
-  - Si `NODE_ENV=production` ou non défini : Utilise l'API réelle d'immatriculation
+- `EMAIL_SENDER` : Adresse email de l'expéditeur des emails
+- `EMAILS_RECIPIENT` : Liste des adresses email destinataires, séparées par des virgules
+  - Exemple : `email1@domain.fr,email2@domain.fr,email3@domain.fr`
+  - Les espaces autour des emails sont automatiquement supprimés
+  - Les emails invalides sont ignorés avec un avertissement dans les logs
+- `NODE_ENV` : Mode d'exécution
+  - Si `NODE_ENV=development` : Mode développement (emails non envoyés, juste loggés ; API d'immatriculation mockée)
+  - Si `NODE_ENV=production` ou non défini : Mode production (emails réellement envoyés ; API réelle d'immatriculation)
 
 ## Démarrage
 
