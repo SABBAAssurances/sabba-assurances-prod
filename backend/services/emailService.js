@@ -33,7 +33,7 @@ class EmailService {
     // Valider le format des emails et créer les objets recipients
     const recipients = emails
       .filter((email) => this._isValidEmail(email))
-      .map((email) => ({ email, name: "" }));
+      .map((email) => ({ email, name: "Sabba Asurance" }));
 
     if (recipients.length === 0) {
       console.warn(
