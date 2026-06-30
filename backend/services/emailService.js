@@ -127,6 +127,15 @@ class EmailService {
   }
 
   formatEmailContent(formData, vehicleData) {
+    const esc = (str) => {
+      if (str === null || str === undefined) return "Non renseigné";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    };
     const formatDate = (dateString) => {
       if (!dateString) return "Non renseigné";
       return new Date(dateString).toLocaleDateString("fr-FR");
@@ -139,78 +148,77 @@ class EmailService {
       }).format(amount);
     };
 
-    // Log pour debug de la version commerciale
-    console.log("=== SERVICE EMAIL - VERSION COMMERCIALE ===");
-    console.log("vehicleData.sra_commercial:", vehicleData?.sra_commercial);
-    console.log("==========================================");
-
-    // Utiliser les données de formData (saisies manuellement) et vehicleData (modifiées par l'utilisateur)
+    // Toutes les valeurs passent par esc() pour éviter l'injection HTML
     const vehicleInfo = {
-      immatriculation:
-        formData.immatriculation || vehicleData?.immat || "Non renseigné",
-      marque: formData.marqueVehicule || vehicleData?.marque || "Non renseigné",
-      modele: formData.typeVersion || vehicleData?.modele || "Non renseigné",
-      dateMiseCirculation:
-        formData.dateMiseCirculation ||
-        vehicleData?.date1erCir_us ||
-        "Non renseigné",
-      valeur:
-        formData.valeurVehicule ||
-        vehicleData?.valeurVehicule ||
-        "Non renseigné",
-      version: vehicleData?.version || "Non renseigné",
-      versionCommerciale: vehicleData?.sra_commercial || "Non renseigné",
-      debutModele: vehicleData?.debut_modele || "Non renseigné",
-      finModele: vehicleData?.fin_modele || "Non renseigné",
-      date1erCirFr: vehicleData?.date1erCir_fr || "Non renseigné",
-      co2: vehicleData?.co2 || "Non renseigné",
-      energie:
-        vehicleData?.energieLibelle ||
-        vehicleData?.energieNGC ||
-        "Non renseigné",
-      typeMoteur: vehicleData?.type_moteur || "Non renseigné",
-      genreVCG:
-        vehicleData?.genreLibelle ||
-        vehicleData?.genreVCGNGC ||
-        "Non renseigné",
-      puissanceFiscale: vehicleData?.puisFisc || "Non renseigné",
-      carrosserie:
-        vehicleData?.carrosserieCG ||
-        vehicleData?.carrosserie ||
-        "Non renseigné",
-      typeTransmission: vehicleData?.type_transmission || "Non renseigné",
-      capaciteLitres: vehicleData?.capacite_litres || "Non renseigné",
-      systemeAlimentation: vehicleData?.systeme_alimentation || "Non renseigné",
-      valves: vehicleData?.valves || "Non renseigné",
-      puissanceReelleKW: vehicleData?.puisFiscReelKW || "Non renseigné",
-      puissanceReelleCH: vehicleData?.puisFiscReelCH || "Non renseigné",
-      collection: vehicleData?.collection || "Non renseigné",
-      vin: vehicleData?.vin || "Non renseigné",
-      variante: vehicleData?.variante || "Non renseigné",
-      boiteVitesse:
-        vehicleData?.boiteVitesseLibelle ||
-        vehicleData?.boite_vitesse ||
-        "Non renseigné",
-      nbPassagers: vehicleData?.nr_passagers || "Non renseigné",
-      nbPortes: vehicleData?.nb_portes || "Non renseigné",
-      typeMine: vehicleData?.type_mine || "Non renseigné",
-      cnit: vehicleData?.cnit || "Non renseigné",
-      couleur: vehicleData?.couleur || "Non renseigné",
-      poids: vehicleData?.poids || "Non renseigné",
-      ptac: vehicleData?.ptac || "Non renseigné",
-      ccm: vehicleData?.ccm || "Non renseigné",
-      cylindres: vehicleData?.cylindres || "Non renseigné",
-      propulsion: vehicleData?.propulsion || "Non renseigné",
-      typeCompression: vehicleData?.type_compression || "Non renseigné",
-      longueur: vehicleData?.longueur || "Non renseigné",
-      largeur: vehicleData?.largeur || "Non renseigné",
-      hauteur: vehicleData?.hauteur || "Non renseigné",
-      empattement: vehicleData?.empattement || "Non renseigné",
-      sraId: vehicleData?.sra_id || "Non renseigné",
-      sraCommercial: vehicleData?.sra_commercial || "Non renseigné",
-      numeroSerie: vehicleData?.numero_serie || "Non renseigné",
-      codeMoteur: vehicleData?.code_moteur || "Non renseigné",
-      codesPlatforme: vehicleData?.codes_platforme || "Non renseigné",
+      immatriculation: esc(formData.immatriculation || vehicleData?.immat),
+      marque: esc(formData.marqueVehicule || vehicleData?.marque),
+      modele: esc(formData.typeVersion || vehicleData?.modele),
+      dateMiseCirculation: esc(formData.dateMiseCirculation || vehicleData?.date1erCir_us),
+      valeur: esc(formData.valeurVehicule || vehicleData?.valeurVehicule),
+      version: esc(vehicleData?.version),
+      versionCommerciale: esc(vehicleData?.sra_commercial),
+      debutModele: esc(vehicleData?.debut_modele),
+      finModele: esc(vehicleData?.fin_modele),
+      date1erCirFr: esc(vehicleData?.date1erCir_fr),
+      co2: esc(vehicleData?.co2),
+      energie: esc(vehicleData?.energieLibelle || vehicleData?.energieNGC),
+      typeMoteur: esc(vehicleData?.type_moteur),
+      genreVCG: esc(vehicleData?.genreLibelle || vehicleData?.genreVCGNGC),
+      puissanceFiscale: esc(vehicleData?.puisFisc),
+      carrosserie: esc(vehicleData?.carrosserieCG || vehicleData?.carrosserie),
+      typeTransmission: esc(vehicleData?.type_transmission),
+      capaciteLitres: esc(vehicleData?.capacite_litres),
+      systemeAlimentation: esc(vehicleData?.systeme_alimentation),
+      valves: esc(vehicleData?.valves),
+      puissanceReelleKW: esc(vehicleData?.puisFiscReelKW),
+      puissanceReelleCH: esc(vehicleData?.puisFiscReelCH),
+      collection: esc(vehicleData?.collection),
+      vin: esc(vehicleData?.vin),
+      variante: esc(vehicleData?.variante),
+      boiteVitesse: esc(vehicleData?.boiteVitesseLibelle || vehicleData?.boite_vitesse),
+      nbPassagers: esc(vehicleData?.nr_passagers),
+      nbPortes: esc(vehicleData?.nb_portes),
+      typeMine: esc(vehicleData?.type_mine),
+      cnit: esc(vehicleData?.cnit),
+      couleur: esc(vehicleData?.couleur),
+      poids: esc(vehicleData?.poids),
+      ptac: esc(vehicleData?.ptac),
+      ccm: esc(vehicleData?.ccm),
+      cylindres: esc(vehicleData?.cylindres),
+      propulsion: esc(vehicleData?.propulsion),
+      typeCompression: esc(vehicleData?.type_compression),
+      longueur: esc(vehicleData?.longueur),
+      largeur: esc(vehicleData?.largeur),
+      hauteur: esc(vehicleData?.hauteur),
+      empattement: esc(vehicleData?.empattement),
+      sraId: esc(vehicleData?.sra_id),
+      sraCommercial: esc(vehicleData?.sra_commercial),
+      numeroSerie: esc(vehicleData?.numero_serie),
+      codeMoteur: esc(vehicleData?.code_moteur),
+      codesPlatforme: esc(vehicleData?.codes_platforme),
+    };
+
+    // Champs personnels — saisie libre, échappement obligatoire
+    const userInfo = {
+      prenom: esc(formData.prenom),
+      nomFamille: esc(formData.nomFamille),
+      adresse: esc(formData.adresse),
+      ville: esc(formData.ville),
+      codePostal: esc(formData.codePostal),
+      dateNaissance: formatDate(formData.dateNaissance),
+      moisAnneePermis: esc(formData.moisAnneePermis),
+      profession: esc(formData.profession),
+      email: esc(formData.email),
+      telephone: esc(formData.telephone),
+      bonusMalus: esc(formData.bonusMalus),
+      sinistres36Mois: formData.sinistres36Mois ? "OUI" : "NON",
+      sinistres36MoisDetails: esc(formData.sinistres36MoisDetails),
+      utilisationVehicule: esc(formData.utilisationVehicule),
+      modeFinancement: esc(formData.modeFinancement),
+      lieuStationnement: esc(formData.lieuStationnement),
+      choixGaranties: esc(formData.choixGaranties),
+      demandesParticulieres: esc(formData.demandesParticulieres),
+      commentConnaissance: esc(formData.commentConnaissance),
     };
 
     return `
@@ -423,115 +431,89 @@ class EmailService {
             <h3>👤 Informations personnelles</h3>
             <div class="field">
               <span class="label">Prénom:</span>
-              <span class="value">${formData.prenom || "Non renseigné"}</span>
+              <span class="value">${userInfo.prenom}</span>
             </div>
             <div class="field">
               <span class="label">Nom de famille:</span>
-              <span class="value">${
-                formData.nomFamille || "Non renseigné"
-              }</span>
+              <span class="value">${userInfo.nomFamille}</span>
             </div>
             <div class="field">
               <span class="label">Adresse:</span>
-              <span class="value">${formData.adresse || "Non renseigné"}</span>
+              <span class="value">${userInfo.adresse}</span>
             </div>
             <div class="field">
               <span class="label">Ville:</span>
-              <span class="value">${formData.ville || "Non renseigné"}</span>
+              <span class="value">${userInfo.ville}</span>
             </div>
             <div class="field">
               <span class="label">Code postal:</span>
-              <span class="value">${
-                formData.codePostal || "Non renseigné"
-              }</span>
+              <span class="value">${userInfo.codePostal}</span>
             </div>
             <div class="field">
               <span class="label">Date de naissance:</span>
-              <span class="value">${formatDate(formData.dateNaissance)}</span>
+              <span class="value">${userInfo.dateNaissance}</span>
             </div>
             <div class="field">
               <span class="label">Mois/année permis:</span>
-              <span class="value">${
-                formData.moisAnneePermis || "Non renseigné"
-              }</span>
+              <span class="value">${userInfo.moisAnneePermis}</span>
             </div>
             <div class="field">
-              <span class="label">Profession & secteur:</span>
-              <span class="value">${
-                formData.profession || "Non renseigné"
-              }</span>
+              <span class="label">Profession &amp; secteur:</span>
+              <span class="value">${userInfo.profession}</span>
             </div>
             <div class="field">
               <span class="label">Email:</span>
-              <span class="value">${formData.email || "Non renseigné"}</span>
+              <span class="value">${userInfo.email}</span>
             </div>
             <div class="field">
               <span class="label">Téléphone:</span>
-              <span class="value">${
-                formData.telephone || "Non renseigné"
-              }</span>
+              <span class="value">${userInfo.telephone}</span>
             </div>
           </div>
           <div class="section">
             <h3>🚗 Informations d'assurance</h3>
             <div class="field">
               <span class="label">Bonus/Malus:</span>
-              <span class="value">${
-                formData.bonusMalus || "Non renseigné"
-              }</span>
+              <span class="value">${userInfo.bonusMalus}</span>
             </div>
             <div class="field">
               <span class="label">Sinistres dans les 36 derniers mois:</span>
-              <span class="value">${
-                formData.sinistres36Mois ? "OUI" : "NON"
-              }</span>
+              <span class="value">${userInfo.sinistres36Mois}</span>
             </div>
             ${
-              formData.sinistres36Mois && formData.sinistres36MoisDetails
+              formData.sinistres36Mois && userInfo.sinistres36MoisDetails
                 ? `<div class="field">
                     <span class="label">Détails des sinistres:</span>
-                    <span class="value">${formData.sinistres36MoisDetails}</span>
+                    <span class="value">${userInfo.sinistres36MoisDetails}</span>
                    </div>`
                 : ""
             }
             <div class="field">
               <span class="label">Utilisation du véhicule:</span>
-              <span class="value">${
-                formData.utilisationVehicule || "Non renseigné"
-              }</span>
+              <span class="value">${userInfo.utilisationVehicule}</span>
             </div>
             <div class="field">
               <span class="label">Mode de financement:</span>
-              <span class="value">${
-                formData.modeFinancement || "Non renseigné"
-              }</span>
+              <span class="value">${userInfo.modeFinancement}</span>
             </div>
             <div class="field">
               <span class="label">Lieu de stationnement:</span>
-              <span class="value">${
-                formData.lieuStationnement || "Non renseigné"
-              }</span>
+              <span class="value">${userInfo.lieuStationnement}</span>
             </div>
             <div class="field">
               <span class="label">Choix des garanties:</span>
-              <span class="value">${
-                formData.choixGaranties || "Non renseigné"
-              }</span>
+              <span class="value">${userInfo.choixGaranties}</span>
             </div>
           </div>
           <div class="section">
             <h3>📝 Informations complémentaires</h3>
             <div class="field">
               <span class="label">Demandes particulières:</span>
-              <span class="value">${
-                formData.demandesParticulieres || "Aucune"
-              }</span>
+              <span class="value">${userInfo.demandesParticulieres}</span>
             </div>
             <div class="field">
               <span class="label">Comment nous avez-vous connu:</span>
-              <span class="value">${
-                formData.commentConnaissance || "Non renseigné"
-              }</span>
+              <span class="value">${userInfo.commentConnaissance}</span>
             </div>
           </div>
         </div>

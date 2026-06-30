@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { Turnstile } from "@marsidev/react-turnstile";
+import React, { useCallback, useEffect, useState } from "react";
 
 interface VehicleSearchProps {
-  onSearch: (plaque: string) => void;
+  onSearch: (plaque: string, turnstileToken: string) => void;
   loading: boolean;
   error: string | null;
   launchAutomaticSearch: boolean;
@@ -9,6 +10,7 @@ interface VehicleSearchProps {
 }
 
 const plaqueRegex = /^[A-Z]{2}-?\d{3}-?[A-Z]{2}$/i;
+const TURNSTILE_SITE_KEY = process.env.REACT_APP_TURNSTILE_SITE_KEY;
 
 const VehicleSearch: React.FC<VehicleSearchProps> = ({
   onSearch,
@@ -18,12 +20,23 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
   onContinueWithoutSearch,
 }) => {
   const [plaque, setPlaque] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   const isPlaqueValid = plaqueRegex.test(plaque.trim().toUpperCase());
 
-  // Détecter automatiquement le paramètre immat dans l'URL seulement si c'est la première visite
+  const formatPlaque = useCallback((value: string): string => {
+    const cleaned = value.replace(/[^A-Za-z0-9-]/g, "").toUpperCase();
+    const withoutDashes = cleaned.replace(/-/g, "");
+    if (withoutDashes.length <= 2) return withoutDashes;
+    if (withoutDashes.length <= 5)
+      return `${withoutDashes.slice(0, 2)}-${withoutDashes.slice(2)}`;
+    return `${withoutDashes.slice(0, 2)}-${withoutDashes.slice(2, 5)}-${withoutDashes.slice(5, 7)}`;
+  }, []);
+
+  // Recherche automatique depuis le paramètre URL ?immat=
+  // Attend que le token Turnstile soit prêt avant de déclencher
   useEffect(() => {
-    if (!isFirstVisit) return; // Ne pas faire la recherche automatique si ce n'est pas la première visite
+    if (!isFirstVisit || !turnstileToken) return;
 
     const urlParams = new URLSearchParams(window.location.search);
     const immatParam = urlParams.get("immat");
@@ -31,44 +44,20 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
     if (immatParam && plaqueRegex.test(immatParam.trim().toUpperCase())) {
       const formattedImmat = formatPlaque(immatParam);
       setPlaque(formattedImmat);
-
-      // Déclencher automatiquement la recherche après un court délai
       setTimeout(() => {
-        onSearch(formattedImmat.trim());
+        onSearch(formattedImmat.trim(), turnstileToken);
       }, 100);
     }
-  }, [onSearch, isFirstVisit]);
-
-  const formatPlaque = (value: string): string => {
-    // Supprimer tous les caractères non alphanumériques sauf les tirets
-    const cleaned = value.replace(/[^A-Za-z0-9-]/g, "").toUpperCase();
-
-    // Supprimer les tirets existants pour reformater
-    const withoutDashes = cleaned.replace(/-/g, "");
-
-    // Appliquer le formatage selon la longueur
-    if (withoutDashes.length <= 2) {
-      return withoutDashes;
-    } else if (withoutDashes.length <= 5) {
-      return `${withoutDashes.slice(0, 2)}-${withoutDashes.slice(2)}`;
-    } else {
-      return `${withoutDashes.slice(0, 2)}-${withoutDashes.slice(
-        2,
-        5
-      )}-${withoutDashes.slice(5, 7)}`;
-    }
-  };
+  }, [onSearch, isFirstVisit, turnstileToken, formatPlaque]);
 
   const handlePlaqueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const formatted = formatPlaque(value);
-    setPlaque(formatted);
+    setPlaque(formatPlaque(e.target.value));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isPlaqueValid) {
-      onSearch(plaque.trim());
+    if (isPlaqueValid && turnstileToken) {
+      onSearch(plaque.trim(), turnstileToken);
     }
   };
 
@@ -90,22 +79,26 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
           required
         />
       </div>
+
+      {TURNSTILE_SITE_KEY && (
+        <Turnstile
+          siteKey={TURNSTILE_SITE_KEY}
+          onSuccess={setTurnstileToken}
+          onExpire={() => setTurnstileToken(null)}
+          onError={() => setTurnstileToken(null)}
+          options={{ appearance: "interaction-only" }}
+        />
+      )}
+
       <div
         className="step-navigation"
-        style={{
-          display: "flex",
-          gap: "12px",
-          flexWrap: "wrap",
-        }}
+        style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}
       >
         <button
           className="btn btn-primary"
           type="submit"
-          disabled={loading || !isPlaqueValid}
-          style={{
-            flex: "3 1 200px",
-            minWidth: 0,
-          }}
+          disabled={loading || !isPlaqueValid || !turnstileToken}
+          style={{ flex: "3 1 200px", minWidth: 0 }}
         >
           {loading ? (
             <span
@@ -124,10 +117,7 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
         <button
           className="btn btn-secondary"
           onClick={onContinueWithoutSearch}
-          style={{
-            flex: "1 1 180px",
-            minWidth: 0,
-          }}
+          style={{ flex: "1 1 180px", minWidth: 0 }}
         >
           Continuer sans recherche
         </button>

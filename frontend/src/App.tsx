@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AdditionalInfoStep from "./components/AdditionalInfoStep";
 import ApiResultStep from "./components/ApiResultStep";
 import InsuranceInfoStep from "./components/InsuranceInfoStep";
@@ -150,13 +150,13 @@ const App: React.FC = () => {
     });
   };
 
-  const handleVehicleSearch = async (plaque: string) => {
+  const handleVehicleSearch = useCallback(async (plaque: string, turnstileToken: string) => {
     setLoading(true);
     setError(null);
     setIsResearchSkipped(false);
 
     try {
-      const result = await apiService.getVehicleInfo(plaque);
+      const result = await apiService.getVehicleInfo(plaque, turnstileToken);
 
       if (result.success && result.data) {
         setVehicleData(result.data);
@@ -205,7 +205,7 @@ const App: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const handleApiResultContinue = (modifiedData?: VehicleData | null) => {
     // Si des données modifiées sont fournies, les utiliser à la place des données originales
@@ -234,7 +234,7 @@ const App: React.FC = () => {
     navigateToNextStep();
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (turnstileToken: string) => {
     setLoading(true);
     setError(null);
 
@@ -251,7 +251,8 @@ const App: React.FC = () => {
 
       const result = await apiService.sendEmailRecap(
         formData,
-        vehicleDataToSend
+        vehicleDataToSend,
+        turnstileToken
       );
 
       if (result.success) {

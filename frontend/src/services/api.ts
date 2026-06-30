@@ -22,9 +22,11 @@ apiClient.interceptors.response.use(
 
 export const apiService = {
   // Récupérer les informations d'un véhicule par plaque
-  async getVehicleInfo(plaque: string): Promise<ApiResponse<VehicleData>> {
+  async getVehicleInfo(plaque: string, turnstileToken: string): Promise<ApiResponse<VehicleData>> {
     try {
-      const response = await apiClient.get(`/immatriculation?plaque=${encodeURIComponent(plaque)}`);
+      const response = await apiClient.get(`/vref?plaque=${encodeURIComponent(plaque)}`, {
+        headers: { 'X-Turnstile-Token': turnstileToken },
+      });
       return {
         ...response.data,
         httpCode: response.status
@@ -39,11 +41,13 @@ export const apiService = {
   },
 
   // Envoyer l'email de récapitulatif
-  async sendEmailRecap(formData: FormData, vehicleData?: VehicleData): Promise<EmailResponse> {
+  async sendEmailRecap(formData: FormData, vehicleData?: VehicleData, turnstileToken?: string): Promise<EmailResponse> {
     try {
       const response = await apiClient.post('/send-email-recap', {
         formData,
         vehicleData
+      }, {
+        headers: turnstileToken ? { 'X-Turnstile-Token': turnstileToken } : {},
       });
       return {
         ...response.data,

@@ -1,15 +1,18 @@
-import React from "react";
+import { Turnstile } from "@marsidev/react-turnstile";
+import React, { useState } from "react";
 import { FormData, VehicleData } from "../types";
 
 interface SummaryStepProps {
   formData: FormData;
   vehicleData?: VehicleData | null;
-  onSubmit: () => void;
+  onSubmit: (turnstileToken: string) => void;
   onPrev: () => void;
   loading: boolean;
   error: string | null;
   success: string | null;
 }
+
+const TURNSTILE_SITE_KEY = process.env.REACT_APP_TURNSTILE_SITE_KEY;
 
 const SummaryStep: React.FC<SummaryStepProps> = ({
   formData,
@@ -20,6 +23,14 @@ const SummaryStep: React.FC<SummaryStepProps> = ({
   error,
   success,
 }) => {
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+
+  const handleSubmit = () => {
+    if (turnstileToken) {
+      onSubmit(turnstileToken);
+    }
+  };
+
   return (
     <div className="summary-container">
       <h3>Récapitulatif de votre demande</h3>
@@ -102,9 +113,7 @@ const SummaryStep: React.FC<SummaryStepProps> = ({
           {formData.sinistres36Mois && formData.sinistres36MoisDetails && (
             <div className="info-row">
               <span className="info-label">Détails des sinistres :</span>
-              <span className="info-value">
-                {formData.sinistres36MoisDetails}
-              </span>
+              <span className="info-value">{formData.sinistres36MoisDetails}</span>
             </div>
           )}
           <div className="info-row">
@@ -134,6 +143,17 @@ const SummaryStep: React.FC<SummaryStepProps> = ({
             <span className="info-value">{formData.commentConnaissance}</span>
           </div>
         </div>
+
+        {TURNSTILE_SITE_KEY && (
+          <Turnstile
+            siteKey={TURNSTILE_SITE_KEY}
+            onSuccess={setTurnstileToken}
+            onExpire={() => setTurnstileToken(null)}
+            onError={() => setTurnstileToken(null)}
+            options={{ appearance: "interaction-only" }}
+          />
+        )}
+
         <div className="step-navigation">
           <button
             type="button"
@@ -146,15 +166,15 @@ const SummaryStep: React.FC<SummaryStepProps> = ({
           <button
             type="button"
             className="btn btn-success"
-            onClick={onSubmit}
-            disabled={loading}
+            onClick={handleSubmit}
+            disabled={loading || !turnstileToken}
           >
             {loading ? "Envoi en cours..." : "Envoyer la demande"}
           </button>
         </div>
         {error && <div className="message error">{error}</div>}
         {success && <div className="message success">{success}</div>}
-      </div>{" "}
+      </div>
     </div>
   );
 };
