@@ -29,14 +29,24 @@ const PersonalInfoStepFirstPart: React.FC<PersonalInfoStepFirstPartProps> = ({
     const newErrors: ValidationError[] = [];
     if (!formData.prenom.trim())
       newErrors.push({ field: "prenom", message: "Champ requis" });
+    else if (formData.prenom.length > 100)
+      newErrors.push({ field: "prenom", message: "Maximum 100 caractères" });
     if (!formData.nomFamille.trim())
       newErrors.push({ field: "nomFamille", message: "Champ requis" });
-    if (!formData.ville.trim())
-      newErrors.push({ field: "ville", message: "Champ requis" });
+    else if (formData.nomFamille.length > 100)
+      newErrors.push({ field: "nomFamille", message: "Maximum 100 caractères" });
     if (!formData.adresse.trim())
       newErrors.push({ field: "adresse", message: "Champ requis" });
+    else if (formData.adresse.length > 200)
+      newErrors.push({ field: "adresse", message: "Maximum 200 caractères" });
+    if (!formData.ville.trim())
+      newErrors.push({ field: "ville", message: "Champ requis" });
+    else if (formData.ville.length > 100)
+      newErrors.push({ field: "ville", message: "Maximum 100 caractères" });
     if (!formData.codePostal.trim())
       newErrors.push({ field: "codePostal", message: "Champ requis" });
+    else if (formData.codePostal.length > 10)
+      newErrors.push({ field: "codePostal", message: "Maximum 10 caractères" });
     if (!formData.dateNaissance)
       newErrors.push({ field: "dateNaissance", message: "Champ requis" });
     if (!formData.moisAnneePermis)
@@ -61,6 +71,7 @@ const PersonalInfoStepFirstPart: React.FC<PersonalInfoStepFirstPartProps> = ({
           className={`form-input${getError("prenom") ? " error" : ""}`}
           type="text"
           value={formData.prenom}
+          maxLength={100}
           onChange={(e) => onUpdate({ prenom: e.target.value })}
         />
         {getError("prenom") && (
@@ -74,6 +85,7 @@ const PersonalInfoStepFirstPart: React.FC<PersonalInfoStepFirstPartProps> = ({
           className={`form-input${getError("nomFamille") ? " error" : ""}`}
           type="text"
           value={formData.nomFamille}
+          maxLength={100}
           onChange={(e) => onUpdate({ nomFamille: e.target.value })}
         />
         {getError("nomFamille") && (
@@ -86,6 +98,7 @@ const PersonalInfoStepFirstPart: React.FC<PersonalInfoStepFirstPartProps> = ({
           className={`form-input${getError("adresse") ? " error" : ""}`}
           type="text"
           value={formData.adresse}
+          maxLength={200}
           onChange={(e) => onUpdate({ adresse: e.target.value })}
         />
         {getError("adresse") && (
@@ -99,6 +112,7 @@ const PersonalInfoStepFirstPart: React.FC<PersonalInfoStepFirstPartProps> = ({
           className={`form-input${getError("ville") ? " error" : ""}`}
           type="text"
           value={formData.ville}
+          maxLength={100}
           onChange={(e) => onUpdate({ ville: e.target.value })}
         />
         {getError("ville") && (
@@ -111,6 +125,7 @@ const PersonalInfoStepFirstPart: React.FC<PersonalInfoStepFirstPartProps> = ({
           className={`form-input${getError("codePostal") ? " error" : ""}`}
           type="text"
           value={formData.codePostal}
+          maxLength={10}
           onChange={(e) => onUpdate({ codePostal: e.target.value })}
         />
         {getError("codePostal") && (

@@ -32,8 +32,12 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
     const newErrors: ValidationError[] = [];
     if (!formData.marqueVehicule.trim())
       newErrors.push({ field: "marqueVehicule", message: "Champ requis" });
+    else if (formData.marqueVehicule.length > 100)
+      newErrors.push({ field: "marqueVehicule", message: "Maximum 100 caractères" });
     if (!formData.typeVersion.trim())
       newErrors.push({ field: "typeVersion", message: "Champ requis" });
+    else if (formData.typeVersion.length > 200)
+      newErrors.push({ field: "typeVersion", message: "Maximum 200 caractères" });
     if (!formData.dateMiseCirculation)
       newErrors.push({ field: "dateMiseCirculation", message: "Champ requis" });
     if (!formData.nombreCVFiscaux)
@@ -76,6 +80,7 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
             }`}
             type="text"
             value={formData.marqueVehicule}
+            maxLength={100}
             onChange={(e) => {
               onUpdate({ marqueVehicule: e.target.value });
               onVehicleDataUpdate({ marque: e.target.value });
@@ -93,6 +98,7 @@ const VehicleInfoStep: React.FC<VehicleInfoStepProps> = ({
             className={`form-input${getError("typeVersion") ? " error" : ""}`}
             type="text"
             value={formData.typeVersion}
+            maxLength={200}
             onChange={(e) => {
               onUpdate({ typeVersion: e.target.value });
               onVehicleDataUpdate({ modele: e.target.value });

@@ -1,20 +1,26 @@
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
 const dotenv = require("dotenv");
 
 dotenv.config();
 
+if (!process.env.TURNSTILE_SECRET_KEY) {
+  throw new Error("FATAL: TURNSTILE_SECRET_KEY non défini.");
+}
+
 const app = express();
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
+app.use(helmet({ frameguard: false }));
 app.use(
   cors({
     origin: FRONTEND_URL,
     credentials: true,
   })
 );
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "50kb" }));
+app.use(express.urlencoded({ extended: true, limit: "50kb" }));
 
 // Vérifie que la requête provient du frontend (navigateur).
 // Les navigateurs envoient toujours le header Origin pour les requêtes cross-origin.

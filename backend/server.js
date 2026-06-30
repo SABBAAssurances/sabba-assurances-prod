@@ -1,16 +1,23 @@
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
 const dotenv = require("dotenv");
 
 dotenv.config();
+
+if (!process.env.TURNSTILE_SECRET_KEY) {
+  console.error("FATAL: TURNSTILE_SECRET_KEY non défini.");
+  process.exit(1);
+}
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
+app.use(helmet({ frameguard: false }));
 app.use(cors({ origin: FRONTEND_URL, credentials: true }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "50kb" }));
+app.use(express.urlencoded({ extended: true, limit: "50kb" }));
 
 function requireFrontendOrigin(req, res, next) {
   const origin = req.headers.origin;

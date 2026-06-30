@@ -53,6 +53,8 @@ const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
       newErrors.push({ field: "lieuStationnement", message: "Champ requis" });
     if (!formData.choixGaranties)
       newErrors.push({ field: "choixGaranties", message: "Champ requis" });
+    if (formData.demandesParticulieres.length > 2000)
+      newErrors.push({ field: "demandesParticulieres", message: "Maximum 2000 caractères" });
 
     setErrors(newErrors);
     return newErrors.length === 0;
@@ -133,6 +135,7 @@ const AdditionalInfoStep: React.FC<AdditionalInfoStepProps> = ({
           className="form-textarea"
           value={formData.demandesParticulieres}
           onChange={(e) => onUpdate({ demandesParticulieres: e.target.value })}
+          maxLength={2000}
           rows={2}
         />
       </div>

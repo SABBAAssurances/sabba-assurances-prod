@@ -14,6 +14,10 @@ interface SummaryStepProps {
 
 const TURNSTILE_SITE_KEY = process.env.REACT_APP_TURNSTILE_SITE_KEY;
 
+if (!TURNSTILE_SITE_KEY) {
+  throw new Error("REACT_APP_TURNSTILE_SITE_KEY non défini.");
+}
+
 const SummaryStep: React.FC<SummaryStepProps> = ({
   formData,
   vehicleData,
@@ -144,15 +148,13 @@ const SummaryStep: React.FC<SummaryStepProps> = ({
           </div>
         </div>
 
-        {TURNSTILE_SITE_KEY && (
-          <Turnstile
-            siteKey={TURNSTILE_SITE_KEY}
-            onSuccess={setTurnstileToken}
-            onExpire={() => setTurnstileToken(null)}
-            onError={() => setTurnstileToken(null)}
-            options={{ appearance: "interaction-only" }}
-          />
-        )}
+        <Turnstile
+          siteKey={TURNSTILE_SITE_KEY}
+          onSuccess={setTurnstileToken}
+          onExpire={() => setTurnstileToken(null)}
+          onError={() => setTurnstileToken(null)}
+          options={{ appearance: "interaction-only" }}
+        />
 
         <div className="step-navigation">
           <button

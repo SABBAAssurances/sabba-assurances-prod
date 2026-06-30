@@ -45,14 +45,10 @@ const InsuranceInfoStep: React.FC<InsuranceInfoStepProps> = ({
       newErrors.push({ field: "sinistres36Mois", message: "Champ requis" });
     if (!formData.utilisationVehicule)
       newErrors.push({ field: "utilisationVehicule", message: "Champ requis" });
-    if (
-      formData.sinistres36Mois === true &&
-      !formData.sinistres36MoisDetails.trim()
-    )
-      newErrors.push({
-        field: "sinistres36MoisDetails",
-        message: "Veuillez détailler vos sinistres",
-      });
+    if (formData.sinistres36Mois === true && !formData.sinistres36MoisDetails.trim())
+      newErrors.push({ field: "sinistres36MoisDetails", message: "Veuillez détailler vos sinistres" });
+    else if (formData.sinistres36MoisDetails.length > 2000)
+      newErrors.push({ field: "sinistres36MoisDetails", message: "Maximum 2000 caractères" });
     setErrors(newErrors);
     return newErrors.length === 0;
   };
@@ -146,6 +142,7 @@ const InsuranceInfoStep: React.FC<InsuranceInfoStepProps> = ({
             onChange={(e) =>
               onUpdate({ sinistres36MoisDetails: e.target.value })
             }
+            maxLength={2000}
             placeholder="Décrivez brièvement les circonstances de vos sinistres..."
             rows={3}
           />

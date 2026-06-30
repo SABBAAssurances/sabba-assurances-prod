@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { FormData, ValidationError } from "../types";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const connaissanceOptions = [
   { value: "Par mon club", label: "Par mon club" },
   { value: "Un ami m'a recommandé", label: "Un ami m'a recommandé" },
@@ -37,10 +39,18 @@ const PersonalInfoStepSecondPart: React.FC<PersonalInfoStepSecondPartProps> = ({
     const newErrors: ValidationError[] = [];
     if (!formData.profession.trim())
       newErrors.push({ field: "profession", message: "Champ requis" });
+    else if (formData.profession.length > 150)
+      newErrors.push({ field: "profession", message: "Maximum 150 caractères" });
     if (!formData.email.trim())
       newErrors.push({ field: "email", message: "Champ requis" });
+    else if (!EMAIL_REGEX.test(formData.email))
+      newErrors.push({ field: "email", message: "Format d'email invalide" });
+    else if (formData.email.length > 254)
+      newErrors.push({ field: "email", message: "Maximum 254 caractères" });
     if (!formData.telephone.trim())
       newErrors.push({ field: "telephone", message: "Champ requis" });
+    else if (formData.telephone.length > 20)
+      newErrors.push({ field: "telephone", message: "Maximum 20 caractères" });
     setErrors(newErrors);
     return newErrors.length === 0;
   };
@@ -61,6 +71,7 @@ const PersonalInfoStepSecondPart: React.FC<PersonalInfoStepSecondPartProps> = ({
           className={`form-input${getError("profession") ? " error" : ""}`}
           type="text"
           value={formData.profession}
+          maxLength={150}
           onChange={(e) => onUpdate({ profession: e.target.value })}
         />
         {getError("profession") && (
@@ -73,6 +84,7 @@ const PersonalInfoStepSecondPart: React.FC<PersonalInfoStepSecondPartProps> = ({
           className={`form-input${getError("email") ? " error" : ""}`}
           type="email"
           value={formData.email}
+          maxLength={254}
           onChange={(e) => onUpdate({ email: e.target.value })}
           autoComplete="email"
           inputMode="email"
@@ -87,6 +99,7 @@ const PersonalInfoStepSecondPart: React.FC<PersonalInfoStepSecondPartProps> = ({
           className={`form-input${getError("telephone") ? " error" : ""}`}
           type="tel"
           value={formData.telephone}
+          maxLength={20}
           onChange={(e) => onUpdate({ telephone: e.target.value })}
           autoComplete="tel"
           inputMode="tel"

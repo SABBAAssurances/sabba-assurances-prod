@@ -390,6 +390,7 @@ Envoie l'email de récapitulatif à l'équipe Sabba Assurances.
 
 ### Cloudflare Turnstile
 
+- **Compte** : rayan.kheloufi@r-square.fr (dashboard Cloudflare)
 - **Documentation** : [developers.cloudflare.com/turnstile](https://developers.cloudflare.com/turnstile/)
 - **Package React** : `@marsidev/react-turnstile` (recommandé officiellement par Cloudflare)
 - **Mode** : Managed + `appearance: "interaction-only"` — le widget est invisible pour les utilisateurs légitimes, visible uniquement si une interaction manuelle est requise.

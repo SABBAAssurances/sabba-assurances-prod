@@ -2,6 +2,17 @@
     "buildCommand": "npm run build",
     "outputDirectory": "build",
     "framework": "create-react-app",
+    "headers": [
+        {
+            "source": "/(.*)",
+            "headers": [
+                {
+                    "key": "Content-Security-Policy",
+                    "value": "frame-ancestors 'self' https://sabba-assurances.fr"
+                }
+            ]
+        }
+    ],
     "rewrites": [
         {
             "source": "/api/(.*)",

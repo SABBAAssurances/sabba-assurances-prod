@@ -12,6 +12,10 @@ interface VehicleSearchProps {
 const plaqueRegex = /^[A-Z]{2}-?\d{3}-?[A-Z]{2}$/i;
 const TURNSTILE_SITE_KEY = process.env.REACT_APP_TURNSTILE_SITE_KEY;
 
+if (!TURNSTILE_SITE_KEY) {
+  throw new Error("REACT_APP_TURNSTILE_SITE_KEY non défini.");
+}
+
 const VehicleSearch: React.FC<VehicleSearchProps> = ({
   onSearch,
   loading,
@@ -80,15 +84,13 @@ const VehicleSearch: React.FC<VehicleSearchProps> = ({
         />
       </div>
 
-      {TURNSTILE_SITE_KEY && (
-        <Turnstile
-          siteKey={TURNSTILE_SITE_KEY}
-          onSuccess={setTurnstileToken}
-          onExpire={() => setTurnstileToken(null)}
-          onError={() => setTurnstileToken(null)}
-          options={{ appearance: "interaction-only" }}
-        />
-      )}
+      <Turnstile
+        siteKey={TURNSTILE_SITE_KEY}
+        onSuccess={setTurnstileToken}
+        onExpire={() => setTurnstileToken(null)}
+        onError={() => setTurnstileToken(null)}
+        options={{ appearance: "interaction-only" }}
+      />
 
       <div
         className="step-navigation"
