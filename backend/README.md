@@ -1,5 +1,7 @@
 # Backend - API Devis Auto Prestige
 
+> La référence à jour pour les variables d'environnement et l'API est le [README principal](../README.md). En cas de divergence, le README principal fait foi.
+
 ## Description
 
 Backend Express.js pour l'application de devis auto prestige de Sabba Assurances.
@@ -22,6 +24,7 @@ BREVO_API_KEY=your_brevo_api_key_here
 NODE_ENV=development
 EMAIL_SENDER=sender@mail.fr
 EMAILS_RECIPIENT=recipient1@mail.fr,recipient2@mail.fr,recipient3@mail.fr
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
 ```
 
 ## Variables d'environnement
@@ -35,9 +38,10 @@ EMAILS_RECIPIENT=recipient1@mail.fr,recipient2@mail.fr,recipient3@mail.fr
   - Exemple : `email1@domain.fr,email2@domain.fr,email3@domain.fr`
   - Les espaces autour des emails sont automatiquement supprimés
   - Les emails invalides sont ignorés avec un avertissement dans les logs
+- `TURNSTILE_SECRET_KEY` : Clé secrète Cloudflare Turnstile. Obligatoire, le serveur refuse de démarrer sans elle.
 - `NODE_ENV` : Mode d'exécution
-  - Si `NODE_ENV=development` : Mode développement (emails non envoyés, juste loggés ; API d'immatriculation mockée)
-  - Si `NODE_ENV=production` ou non défini : Mode production (emails réellement envoyés ; API réelle d'immatriculation)
+  - Si `NODE_ENV=production` : Mode production (emails réellement envoyés ; API réelle d'immatriculation)
+  - Toute autre valeur, ou non défini : Mode développement (emails non envoyés, juste loggés ; API d'immatriculation mockée)
 
 ## Démarrage
 
@@ -55,7 +59,7 @@ npm start
 
 ## API Endpoints
 
-### GET /api/immatriculation
+### GET /api/vref
 
 Récupère les informations d'un véhicule par sa plaque d'immatriculation.
 
@@ -66,11 +70,11 @@ Récupère les informations d'un véhicule par sa plaque d'immatriculation.
 **Exemple :**
 
 ```
-GET /api/immatriculation?plaque=AA123BC
+GET /api/vref?plaque=AA123BC
 ```
 
 **Mode développement :**
-Si `DEV=true`, retourne toujours les données mockées d'une Renault Megane III, peu importe la plaque fournie.
+Si `NODE_ENV` est différent de `production`, retourne toujours les données mockées d'une Renault Megane III, peu importe la plaque fournie.
 
 ### POST /api/send-email-recap
 
@@ -102,7 +106,8 @@ backend/
 ├── services/            # Services métier
 │   ├── immatriculationService.js
 │   └── emailService.js
-├── server.js            # Point d'entrée
+├── api/index.js         # Point d'entrée Vercel (production)
+├── server.js            # Point d'entrée local
 ├── package.json
 └── README.md
 ```
@@ -117,7 +122,7 @@ backend/
 
 ## Mode développement
 
-En mode développement (`DEV=true`), l'API d'immatriculation retourne des données mockées pour une Renault Megane III. Cela permet de :
+En mode développement (`NODE_ENV` différent de `production`), l'API d'immatriculation retourne des données mockées pour une Renault Megane III. Cela permet de :
 
 - Tester l'application sans consommer d'appels API réels
 - Développer sans dépendre de l'API externe

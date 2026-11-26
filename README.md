@@ -21,6 +21,8 @@ Application web de demande de devis d'assurance automobile. L'utilisateur saisit
 10. [Sécurité](#sécurité)
 11. [Mode développement](#mode-développement)
 12. [Déploiement sur Vercel](#déploiement-sur-vercel)
+13. [Valeurs codées en dur](#valeurs-codées-en-dur)
+14. [Comptes et accès nécessaires](#comptes-et-accès-nécessaires)
 
 ---
 
@@ -28,7 +30,10 @@ Application web de demande de devis d'assurance automobile. L'utilisateur saisit
 
 - Node.js >= 18
 - npm >= 9
-- Comptes actifs sur : [apiplaqueimmatriculation.com](https://www.apiplaqueimmatriculation.com), [Brevo](https://brevo.com), [Cloudflare Turnstile](https://dash.cloudflare.com/?to=/:account/turnstile)
+- Vercel CLI pour déployer : `npm i -g vercel`
+- Comptes actifs sur : [Vercel](https://vercel.com), [apiplaqueimmatriculation.com](https://www.apiplaqueimmatriculation.com), [Brevo](https://brevo.com), [Cloudflare Turnstile](https://dash.cloudflare.com/?to=/:account/turnstile), [Google Tag Manager](https://tagmanager.google.com)
+
+Le détail de ce que chaque compte doit contenir est dans [Comptes et accès nécessaires](#comptes-et-accès-nécessaires).
 
 ---
 
@@ -60,14 +65,16 @@ cp backend/.env.example backend/.env
 
 | Variable | Description | Exemple |
 |---|---|---|
-| `PORT` | Port du serveur local | `3001` |
+| `PORT` | Port du serveur local (défaut `3001`). Inutile sur Vercel. | `3001` |
 | `NODE_ENV` | Environnement. Si différent de `production`, active le mode dev (données mockées, emails loggués) | `development` |
-| `FRONTEND_URL` | URL du frontend autorisée à appeler le backend. Requête refusée (403) si l'`Origin` ne correspond pas. | `http://localhost:3000` |
+| `FRONTEND_URL` | URL du frontend autorisée à appeler le backend (CORS + vérification `Origin`). Doit correspondre **exactement** à l'origine du site : protocole inclus, sans slash final, sans chemin. Requête refusée (403) sinon. | `http://localhost:3000` |
 | `API_KEY_IMMATRICULATION` | Clé API pour [apiplaqueimmatriculation.com](https://www.apiplaqueimmatriculation.com). Inutilisée en mode dev. | `abc123...` |
 | `BREVO_API_KEY` | Clé API Brevo (v3) pour l'envoi d'emails transactionnels. Inutilisée en mode dev. | `xkeysib-...` |
 | `EMAIL_SENDER` | Adresse email expéditeur des demandes de devis. Doit être vérifiée dans Brevo. | `contact@sabba-assurances.fr` |
-| `EMAILS_RECIPIENT` | Un ou plusieurs emails destinataires, séparés par des virgules. | `conseiller@sabba.fr,backup@sabba.fr` |
-| `TURNSTILE_SECRET_KEY` | Clé secrète Cloudflare Turnstile (côté serveur). Obligatoire — toute requête sans token valide est rejetée (403). | `0x4AAAA...` |
+| `EMAILS_RECIPIENT` | Un ou plusieurs emails destinataires, séparés par des virgules. Les adresses invalides sont ignorées ; si la liste est vide, aucun email n'est envoyé. | `conseiller@sabba.fr,backup@sabba.fr` |
+| `TURNSTILE_SECRET_KEY` | Clé secrète Cloudflare Turnstile (côté serveur). **Obligatoire : le backend refuse de démarrer si elle est absente**, et toute requête sans token valide est rejetée (403). Doit appartenir au même widget que `REACT_APP_TURNSTILE_SITE_KEY`. | `0x4AAAA...` |
+
+Les 8 variables ci-dessus sont les seules lues par le backend.
 
 **Exemple complet pour le développement local :**
 
@@ -94,8 +101,10 @@ cp frontend/.env.example frontend/.env
 
 | Variable | Description | Exemple |
 |---|---|---|
-| `REACT_APP_API_URL` | URL de base de l'API backend, sans slash final | `http://localhost:3001/api` |
-| `REACT_APP_TURNSTILE_SITE_KEY` | Clé publique Cloudflare Turnstile (côté client). Si absente, le widget n'est pas affiché et le formulaire fonctionne sans vérification. | `0x4AAAA...` |
+| `REACT_APP_API_URL` | URL de base de l'API backend, sans slash final. Si absente, `http://localhost:3001/api` est utilisé. | `http://localhost:3001/api` |
+| `REACT_APP_TURNSTILE_SITE_KEY` | Clé publique Cloudflare Turnstile (côté client). **Obligatoire : l'application ne se charge pas si elle est absente.** Doit appartenir au même widget que `TURNSTILE_SECRET_KEY`. | `0x4AAAA...` |
+
+Ces 2 variables sont les seules lues par le frontend. Elles sont **intégrées au build** (Create React App) : après toute modification, il faut relancer `npm start` en local ou redéployer le frontend en production.
 
 **Exemple complet pour le développement local :**
 
@@ -248,7 +257,9 @@ frontend/src/
 
 Tous les endpoints nécessitent :
 - Header `Origin` égal à la valeur de `FRONTEND_URL` (vérifié par `requireFrontendOrigin`)
-- Header `X-Turnstile-Token` avec un token Cloudflare Turnstile valide (vérifié par `requireTurnstileToken`, ignoré si `TURNSTILE_SECRET_KEY` n'est pas défini)
+- Header `X-Turnstile-Token` avec un token Cloudflare Turnstile valide (vérifié par `requireTurnstileToken`)
+
+Seule exception : `GET /api/health`.
 
 ### `GET /api/health`
 
@@ -355,7 +366,7 @@ Envoie l'email de récapitulatif à l'équipe Sabba Assurances.
     "commentConnaissance": "Recommandation"
     // ... (voir types/index.ts → FormData pour tous les champs)
   },
-  "vehicleData": { /* objet VehicleData retourné par /api/immatriculation, optionnel */ }
+  "vehicleData": { /* objet VehicleData retourné par /api/vref, optionnel */ }
 }
 ```
 
@@ -390,7 +401,7 @@ Envoie l'email de récapitulatif à l'équipe Sabba Assurances.
 
 ### Cloudflare Turnstile
 
-- **Compte** : rayan.kheloufi@r-square.fr (dashboard Cloudflare)
+- **Compte** : compte Cloudflare du propriétaire du projet. Le widget Turnstile doit lister dans ses « Hostnames » le domaine du frontend.
 - **Documentation** : [developers.cloudflare.com/turnstile](https://developers.cloudflare.com/turnstile/)
 - **Package React** : `@marsidev/react-turnstile` (recommandé officiellement par Cloudflare)
 - **Mode** : Managed + `appearance: "interaction-only"` — le widget est invisible pour les utilisateurs légitimes, visible uniquement si une interaction manuelle est requise.
@@ -406,7 +417,7 @@ Envoie l'email de récapitulatif à l'équipe Sabba Assurances.
 
 ## Sécurité
 
-Deux couches de protection sur tous les endpoints `/api/immatriculation` et `/api/send-email-recap` :
+Deux couches de protection sur les endpoints `/api/vref` et `/api/send-email-recap` :
 
 ### 1. Vérification Origin (`requireFrontendOrigin`)
 
@@ -419,6 +430,14 @@ Token cryptographique à usage unique, valide 300 secondes, généré par Cloudf
 ### 3. Échappement HTML dans les emails
 
 Toutes les données saisies par l'utilisateur sont passées par la fonction `esc()` avant insertion dans le template HTML de l'email, empêchant toute injection HTML/CSS.
+
+### 4. Limites de taille
+
+Le corps des requêtes est limité à 50 ko (`express.json`), et chaque champ du formulaire a une longueur maximale vérifiée dans `emailController.js`.
+
+### 5. Intégration en iframe
+
+Le formulaire est prévu pour être intégré en iframe sur le site vitrine. `frontend/vercel.json` n'autorise l'intégration que depuis `https://sabba-assurances.fr` (en-tête `Content-Security-Policy: frame-ancestors`). Voir [Valeurs codées en dur](#valeurs-codées-en-dur).
 
 ---
 
@@ -441,7 +460,7 @@ Quand `NODE_ENV` est différent de `production` :
 | Variable | Valeur production |
 |---|---|
 | `NODE_ENV` | `production` |
-| `FRONTEND_URL` | `https://sabba-assurances-front.vercel.app` |
+| `FRONTEND_URL` | URL publique du frontend, ex. `https://sabba-assurances-front.vercel.app` (sans slash final) |
 | `API_KEY_IMMATRICULATION` | Votre clé API |
 | `BREVO_API_KEY` | Votre clé Brevo |
 | `EMAIL_SENDER` | Votre adresse expéditeur vérifiée |
@@ -452,8 +471,12 @@ Quand `NODE_ENV` est différent de `production` :
 
 | Variable | Valeur production |
 |---|---|
-| `REACT_APP_API_URL` | `https://sabba-assurances-backend.vercel.app/api` |
+| `REACT_APP_API_URL` | URL publique du backend suivie de `/api`, ex. `https://sabba-assurances-backend.vercel.app/api` |
 | `REACT_APP_TURNSTILE_SITE_KEY` | Clé publique Turnstile |
+
+`PORT` n'est pas à définir sur Vercel. Après toute modification d'une variable, **redéployer** le projet concerné pour qu'elle soit prise en compte.
+
+Si l'URL du frontend change (nouveau domaine), mettre à jour ensemble : `FRONTEND_URL` côté backend, et les « Hostnames » du widget Turnstile côté Cloudflare.
 
 ### Commandes de déploiement
 
@@ -478,6 +501,44 @@ cd frontend && vercel --prod
 ```
 
 Toute modification de logique serveur (routes, middlewares, sécurité) doit être faite dans `api/index.js`. Le fichier `server.js` n'est utilisé qu'en développement local.
+
+---
+
+## Valeurs codées en dur
+
+Ces valeurs ne sont pas des variables d'environnement. Pour les changer, il faut modifier le code puis redéployer.
+
+| Valeur | Fichier | Rôle |
+|---|---|---|
+| Identifiant Google Tag Manager `GTM-WTGRWTMF` | `frontend/public/index.html` (2 occurrences) | Suivi d'audience. À remplacer si le conteneur GTM change. |
+| `frame-ancestors 'self' https://sabba-assurances.fr` | `frontend/vercel.json` | Seul site autorisé à afficher le formulaire en iframe. À adapter si le domaine du site vitrine change (ex. ajout de `https://www.sabba-assurances.fr`). |
+| Nom de l'expéditeur `Sabba Assurances` | `backend/services/emailService.js` | Nom affiché dans les emails de demande de devis. |
+| URL de l'API plaques `https://api.apiplaqueimmatriculation.com` | `backend/services/immatriculationService.js` | Fournisseur des données véhicule. |
+
+---
+
+## Comptes et accès nécessaires
+
+Pour exploiter le projet en autonomie, le propriétaire doit disposer des accès suivants :
+
+| Service | Ce qu'il contient | Variables concernées |
+|---|---|---|
+| **GitHub** | Le code source (dépôt `SABBAAssurances/sabba-assurances-prod`) | — |
+| **Vercel** | Deux projets : le frontend et le backend, avec leurs variables d'environnement et leurs domaines | toutes |
+| **Cloudflare** | Le widget Turnstile (clé publique + clé secrète) | `REACT_APP_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` |
+| **Brevo** | La clé API et l'expéditeur vérifié | `BREVO_API_KEY`, `EMAIL_SENDER` |
+| **apiplaqueimmatriculation.com** | Le token et le solde de requêtes prépayées | `API_KEY_IMMATRICULATION` |
+| **Google Tag Manager** | Le conteneur `GTM-WTGRWTMF` | — (codé en dur) |
+
+### Renouveler une clé
+
+1. Générer la nouvelle clé chez le fournisseur.
+2. Mettre à jour la variable dans Vercel (Settings → Environment Variables) sur le projet concerné.
+3. Redéployer ce projet.
+4. Vérifier le parcours complet sur le site (recherche de plaque, puis envoi d'une demande de test).
+5. Révoquer l'ancienne clé chez le fournisseur.
+
+Pour Turnstile, les deux clés vont par paire : changer la clé publique (frontend) et la clé secrète (backend) en même temps, et redéployer les deux projets.
 
 ---
 

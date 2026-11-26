@@ -1,5 +1,7 @@
 # 🚀 Guide de Déploiement Vercel
 
+> La référence à jour pour les variables d'environnement et l'API est le [README principal](README.md). En cas de divergence, le README fait foi.
+
 ## Prérequis
 
 1. **Compte Vercel** : Créer un compte sur [vercel.com](https://vercel.com)
@@ -47,6 +49,7 @@ Suivez les instructions :
 | `NODE_ENV`                | Mode environnement                     | `production`                                                     |
 | `EMAIL_SENDER`            | Email d'expédition                     | `sender@mail.fr`                                                 |
 | `EMAILS_RECIPIENT`        | Emails de réception (séparés par ,)   | `recipient1@mail.fr,recipient2@mail.fr,recipient3@mail.fr`       |
+| `TURNSTILE_SECRET_KEY`    | Clé secrète Cloudflare Turnstile (obligatoire) | `0x4AAAA...`                                            |
 
 **Note** : Ne pas utiliser la commande `vercel env add` pour éviter les conflits.
 
@@ -85,6 +88,7 @@ Créer le fichier `.env.production` :
 
 ```env
 REACT_APP_API_URL=https://sabba-assurances-backend.vercel.app/api
+REACT_APP_TURNSTILE_SITE_KEY=votre_cle_publique_turnstile
 ```
 
 **Option 2 : Variables Vercel (Recommandé)**
@@ -94,6 +98,12 @@ vercel env add REACT_APP_API_URL
 ```
 
 Valeur : `https://sabba-assurances-backend.vercel.app/api`
+
+```bash
+vercel env add REACT_APP_TURNSTILE_SITE_KEY
+```
+
+Valeur : la clé publique du widget Cloudflare Turnstile (obligatoire).
 
 #### D. Déployer le frontend
 
@@ -107,7 +117,8 @@ vercel --prod
 
 - URL : `https://sabba-assurances-backend.vercel.app`
 - Endpoints :
-  - `GET /api/immatriculation`
+  - `GET /api/health`
+  - `GET /api/vref`
   - `POST /api/send-email-recap`
 
 #### B. Frontend
@@ -133,13 +144,17 @@ Le backend utilise une structure Express.js adaptée pour Vercel :
 | `FRONTEND_URL`            | URL du frontend         | `https://sabba-assurances-frontend.vercel.app` |
 | `API_KEY_IMMATRICULATION` | Clé API immatriculation | `TokenDemo2025A`                               |
 | `BREVO_API_KEY`           | Clé API Brevo           | `xkeysib-...`                                  |
-| `DEV`                     | Mode développement      | `false`                                        |
+| `NODE_ENV`                | Mode environnement      | `production`                                   |
+| `EMAIL_SENDER`            | Email d'expédition      | `sender@mail.fr`                               |
+| `EMAILS_RECIPIENT`        | Emails de réception     | `recipient1@mail.fr,recipient2@mail.fr`        |
+| `TURNSTILE_SECRET_KEY`    | Clé secrète Turnstile   | `0x4AAAA...`                                   |
 
 ### Variables d'environnement Frontend (Vercel Dashboard)
 
 | Variable            | Description          | Exemple                                           |
 | ------------------- | -------------------- | ------------------------------------------------- |
 | `REACT_APP_API_URL` | URL de l'API backend | `https://sabba-assurances-backend.vercel.app/api` |
+| `REACT_APP_TURNSTILE_SITE_KEY` | Clé publique Turnstile | `0x4AAAA...`                          |
 
 ### Configuration locale (Développement)
 
@@ -150,13 +165,17 @@ PORT=3001
 FRONTEND_URL=http://localhost:3000
 API_KEY_IMMATRICULATION=TokenDemo2025A
 BREVO_API_KEY=your_brevo_api_key_here
-DEV=true
+NODE_ENV=development
+EMAIL_SENDER=sender@mail.fr
+EMAILS_RECIPIENT=recipient1@mail.fr
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
 ```
 
 **Frontend** (`frontend/.env`) :
 
 ```env
 REACT_APP_API_URL=http://localhost:3001/api
+REACT_APP_TURNSTILE_SITE_KEY=1x00000000000000000000AA
 ```
 
 ## 🧪 Tests Post-Déploiement
@@ -164,14 +183,11 @@ REACT_APP_API_URL=http://localhost:3001/api
 ### 1. Test du Backend
 
 ```bash
-# Test de recherche véhicule
-curl "https://sabba-assurances-backend.vercel.app/api/immatriculation?plaque=AA123BC"
-
-# Test d'envoi email
-curl -X POST "https://sabba-assurances-backend.vercel.app/api/send-email-recap" \
-  -H "Content-Type: application/json" \
-  -d '{"formData":{"nom":"Test","email":"test@test.com"}}'
+# Test de disponibilité (seul endpoint appelable sans protection)
+curl "https://sabba-assurances-backend.vercel.app/api/health"
 ```
+
+Les endpoints `/api/vref` et `/api/send-email-recap` exigent un `Origin` valide et un token Turnstile : ils répondent 403 à un appel `curl` direct, c'est le comportement attendu. Ils se testent depuis le frontend.
 
 ### 2. Test du Frontend
 
