@@ -1,3 +1,5 @@
+const { randomUUID } = require("node:crypto");
+const { appendResponse } = require("../services/googleSheetsService");
 const emailService = require("../services/emailService");
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -63,7 +65,20 @@ class EmailController {
         return res.status(400).json({ success: false, error: validationError });
       }
 
-      const result = await emailService.sendEmailRecap(formData, vehicleData);
+      const submission = { id: randomUUID(), at: new Date() };
+      let result;
+      try {
+        result = await emailService.sendEmailRecap(formData, vehicleData);
+      } finally {
+        try {
+          await appendResponse(req, formData, submission, result?.success === true);
+        } catch (error) {
+          const code = /^(?:sts|iam|sheets)_http_[0-9]{3}$/.test(error.message)
+            ? error.message
+            : error.name === "TimeoutError" ? "timeout" : "sheets_write_failed";
+          console.error("Google Sheets write failed", { submissionId: submission.id, code });
+        }
+      }
 
       if (result.success) {
         return res.json({
