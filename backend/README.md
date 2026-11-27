@@ -129,3 +129,42 @@ En mode développement (`NODE_ENV` différent de `production`), l'API d'immatric
 - Avoir des données cohérentes pour les tests
 
 Les données mockées incluent toutes les informations nécessaires pour le formulaire d'assurance.
+
+## Export des soumissions vers Google Sheets
+
+La route de récapitulatif conserve sa réponse HTTP et son envoi Brevo. Si
+`GOOGLE_SHEETS_ENABLED=true`, elle ajoute une ligne après la tentative d'envoi.
+La dernière colonne contient le statut de cet envoi.
+
+Configurer uniquement le backend de production dans Vercel.
+
+| Variable | Valeur attendue |
+| --- | --- |
+| `GOOGLE_SHEETS_ENABLED` | `true` pour activer, `false` pour désactiver |
+| `GOOGLE_SHEETS_ID` | Identifiant du classeur privé |
+| `GOOGLE_SHEETS_TAB` | Onglet cible, `Réponses` par défaut |
+| `GOOGLE_WIF_AUDIENCE` | Ressource du fournisseur fédéré, commençant par `//iam.googleapis.com/projects/` |
+| `GOOGLE_SERVICE_ACCOUNT_EMAIL` | Compte de service Google autorisé sur le classeur |
+
+Le fournisseur Google valide l'émetteur et l'audience Vercel ainsi que le
+sujet exact du backend de production. Ce sujet reçoit le rôle
+`roles/iam.workloadIdentityUser` sur le seul compte de service. Le compte de
+service reçoit le rôle Éditeur sur le classeur cible. L'authentification utilise
+des jetons OIDC temporaires. Elle ne requiert aucune clé privée à renouveler.
+
+Pour changer de classeur ou d'onglet, reproduire les en-têtes, attribuer l'accès
+Éditeur au compte de service, mettre à jour les variables Vercel et redéployer.
+La liste `FIELDS` de `services/googleSheetsService.js` définit l'ordre des
+champs et doit évoluer avec les en-têtes et la borne `AJ`. Les deux premières
+colonnes contiennent l'horodatage de Paris et l'identifiant de la soumission.
+Les réponses sont écrites en mode RAW.
+
+Le service retente une fois après un refus explicite pour quota. Après un
+délai d'attente sur l'ajout, l'état de l'écriture est inconnu. Consulter les
+logs Vercel pour le code d'erreur et rechercher l'identifiant dans la feuille
+avant toute reprise manuelle. Il n'y a pas de file persistante. Un second
+envoi du formulaire reçoit un nouvel identifiant.
+
+Pour tester hors production, simuler les trois appels HTTP Google et utiliser
+des données fictives. Pour désactiver l'export, passer
+`GOOGLE_SHEETS_ENABLED` à `false` et redéployer le backend.
